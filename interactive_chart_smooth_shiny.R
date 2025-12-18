@@ -26,9 +26,10 @@ if (!"grade_numeric" %in% colnames(data)) {
   stop("ERROR: grade_numeric column not found in the data.")
 }
 
-# Ensure grade_numeric is numeric
+# Ensure grade_numeric is numeric and restrict to grades 1–8
 data <- data %>%
-  mutate(grade_numeric = as.numeric(grade_numeric))
+  mutate(grade_numeric = as.numeric(grade_numeric)) %>%
+  filter(grade_numeric >= 1, grade_numeric <= 8)
 
 # Validate required columns exist
 required_cols <- c("iso3", "grade_numeric", "proficiency_loess_span1", "n")
@@ -169,12 +170,12 @@ ui <- fluidPage(
       sliderInput("missing_grades_tolerance",
                   "Missing Grades Tolerance:",
                   min = 1,
-                  max = 9,
-                  value = 9,
+                  max = 8,
+                  value = 8,
                   step = 1),
 
       helpText("Minimum observations: Excludes country-grade combinations with fewer observations than this threshold."),
-      helpText("Missing grades tolerance: Maximum number of missing grades allowed per country (1 = complete data with all 9 grades, 9 = all countries included)."),
+      helpText("Missing grades tolerance: Maximum number of missing grades allowed per country (1 = complete data with all 8 grades, 8 = all countries included)."),
       
       hr(),
       
@@ -345,8 +346,8 @@ server <- function(input, output, session) {
     # Apply missing grades tolerance filter
     countries_dropped_by_tolerance <- c()
     if (!is.null(input$missing_grades_tolerance)) {
-      # Calculate expected grades (1-9 = 9 grades total)
-      expected_grades <- 9
+      # Calculate expected grades (1-8 = 8 grades total)
+      expected_grades <- 8
       max_missing_allowed <- input$missing_grades_tolerance - 1
       min_required_grades <- expected_grades - max_missing_allowed
 
@@ -457,7 +458,7 @@ server <- function(input, output, session) {
       )
 
     medians_summary <- df_median_base %>%
-      filter(grade_numeric >= 1, grade_numeric <= 9) %>%
+      filter(grade_numeric >= 1, grade_numeric <= 8) %>%
       group_by(region_group) %>%
       summarise(
         n_countries = n_distinct(iso3),
@@ -544,7 +545,7 @@ server <- function(input, output, session) {
         n_countries = n_distinct(iso3),
         .groups = "drop"
       ) %>%
-      filter(grade_numeric >= 1, grade_numeric <= 9)
+      filter(grade_numeric >= 1, grade_numeric <= 8)
 
     # Create plot
     fig <- plot_ly()
@@ -651,8 +652,8 @@ server <- function(input, output, session) {
           xanchor = "center"
         ),
         xaxis = list(
-          title = "<b>Grade (1-9)</b>",
-          range = c(0, 10),
+          title = "<b>Grade (1-8)</b>",
+          range = c(0.5, 8.5),
           dtick = 1,
           gridcolor = "#E5E5E5"
         ),
@@ -721,7 +722,7 @@ server <- function(input, output, session) {
 
     # Calculate missing grades info
     max_missing <- input$missing_grades_tolerance - 1
-    min_required <- 9 - max_missing
+    min_required <- 8 - max_missing
 
     summary_text <- paste0(
       "Filtered Data:\n",
@@ -760,7 +761,7 @@ server <- function(input, output, session) {
             <li><em>Income Level</em>: Multi-select dropdown - select one or more income levels to compare</li>
             <li><em>Region</em>: Multi-select dropdown - select one or more regions to compare</li>
             <li><em>Minimum Observations</em>: Exclude country-grade combinations with small sample sizes (default: 50)</li>
-            <li><em>Missing Grades Tolerance</em>: Maximum missing grades allowed per country (1 = complete data with all 9 grades, 9 = all countries included, default: 9)</li>
+            <li><em>Missing Grades Tolerance</em>: Maximum missing grades allowed per country (1 = complete data with all 8 grades, 8 = all countries included, default: 8)</li>
           </ul>
         </li>
         <li><strong>Hover:</strong> Hover over data points to see comprehensive information including grade and proficiency values</li>
@@ -779,7 +780,7 @@ server <- function(input, output, session) {
       <ul>
         <li>Individual country lines (grey, opacity 0.6) represent each country's learning gradient</li>
         <li>Bold lines show median proficiency across countries for each grade, grouped by Africa vs. non-Africa</li>
-        <li>X-axis shows grades from 1 to 9 (discrete grade levels)</li>
+        <li>X-axis shows grades from 1 to 8 (discrete grade levels)</li>
         <li>Y-axis shows LOESS smoothed proficiency values as percentages (0-100%)</li>
         <li>LOESS smoothing (span=1) applied to raw proficiency rates for each country-category-subject combination</li>
         <li>All filters work in real-time</li>
@@ -866,8 +867,8 @@ server <- function(input, output, session) {
     # Reset minimum observations to 50
     updateSliderInput(session, "min_observations", value = 50)
 
-    # Reset missing grades tolerance to 9
-    updateSliderInput(session, "missing_grades_tolerance", value = 9)
+    # Reset missing grades tolerance to 8
+    updateSliderInput(session, "missing_grades_tolerance", value = 8)
 
     # Reset income level to all selected
     if (!is.null(input$filter_income)) {
