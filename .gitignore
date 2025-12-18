@@ -1,0 +1,87 @@
+# R-specific files
+.Rhistory
+.RData
+.Ruserdata
+.Rapp.history
+*.Rproj.user
+.Rproj.user/
+
+# RStudio files
+.Rproj.user/
+*.Rproj.user
+
+# Shiny app files
+rsconnect/
+*.log
+
+# Output files
+*.html
+*.pdf
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.svg
+*.xlsx
+*.xls
+*.docx
+*.doc
+
+# Temporary files
+*.tmp
+*.temp
+*~
+.DS_Store
+Thumbs.db
+
+# OS-specific files
+# Windows
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Linux
+*~
+.directory
+.Trash-*
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Environment and secrets
+.env
+.Renviron
+*.key
+*.pem
+
+# Package files
+*.tar.gz
+*.zip
+packrat/
+renv/
+
+# Backup files
+*.bak
+*.backup
+backup/
+*_backup/
+*_old/
+
+# Data files (uncomment if you don't want to track data)
+# *.csv
+# data/*.csv
+
+# Logs
+*.log
+logs/
+
