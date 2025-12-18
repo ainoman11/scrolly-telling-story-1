@@ -123,20 +123,22 @@ ui <- fluidPage(
                     selected = "reading")
       },
       
-      # Income Level: multi-select, all selected by default
+      # Income Level: multi-select dropdown, all selected by default
       if ("income_level" %in% names(filter_columns)) {
-        checkboxGroupInput("filter_income",
-                          "Income Level:",
-                          choices = filter_columns$income_level,
-                          selected = filter_columns$income_level)
+        selectInput("filter_income",
+                    "Income Level:",
+                    choices = filter_columns$income_level,
+                    selected = filter_columns$income_level,
+                    multiple = TRUE)
       },
-      
-      # Region: multi-select, all selected by default
+
+      # Region: multi-select dropdown, all selected by default
       if ("Region" %in% names(filter_columns)) {
-        checkboxGroupInput("filter_region",
-                          "Region:",
-                          choices = filter_columns$Region,
-                          selected = filter_columns$Region)
+        selectInput("filter_region",
+                    "Region:",
+                    choices = filter_columns$Region,
+                    selected = filter_columns$Region,
+                    multiple = TRUE)
       },
       
       # Wealth Quintile: dropdown with "Show All"
@@ -155,14 +157,24 @@ ui <- fluidPage(
                     selected = "<Show All>")
       },
       
-      # Minimum observations filter
-      numericInput("min_observations",
-                   "Minimum Observations (n):",
-                   value = 50,
-                   min = 0,
-                   step = 10),
-      
-      helpText("Excludes country-grade combinations with fewer observations than this threshold."),
+      # Minimum observations filter (slider)
+      sliderInput("min_observations",
+                  "Minimum Observations (n):",
+                  min = 0,
+                  max = 200,
+                  value = 50,
+                  step = 10),
+
+      # Missing grades tolerance filter (slider)
+      sliderInput("missing_grades_tolerance",
+                  "Missing Grades Tolerance:",
+                  min = 1,
+                  max = 9,
+                  value = 9,
+                  step = 1),
+
+      helpText("Minimum observations: Excludes country-grade combinations with fewer observations than this threshold."),
+      helpText("Missing grades tolerance: Maximum number of missing grades allowed per country (1 = complete data with all 9 grades, 9 = all countries included)."),
       
       hr(),
       
@@ -318,6 +330,32 @@ server <- function(input, output, session) {
     rows_after_n_filter <- nrow(df)
     
     # Track countries with their grade count after filter
+    country_grades_after <- df %>%
+      group_by(iso3) %>%
+      summarise(grades_after = n_distinct(grade_numeric), .groups = "drop")
+
+    # Apply missing grades tolerance filter
+    if (!is.null(input$missing_grades_tolerance)) {
+      # Calculate expected grades (1-9 = 9 grades total)
+      expected_grades <- 9
+      max_missing_allowed <- input$missing_grades_tolerance - 1
+      min_required_grades <- expected_grades - max_missing_allowed
+
+      # Filter countries that have at least the minimum required grades
+      countries_with_sufficient_grades <- df %>%
+        group_by(iso3) %>%
+        summarise(actual_grades = n_distinct(grade_numeric), .groups = "drop") %>%
+        filter(actual_grades >= min_required_grades) %>%
+        pull(iso3)
+
+      df <- df %>% filter(iso3 %in% countries_with_sufficient_grades)
+    }
+
+    # Update after missing grades filter
+    countries_after <- unique(df$iso3)
+    rows_after_n_filter <- nrow(df)
+
+    # Recalculate grade counts after missing grades filter
     country_grades_after <- df %>%
       group_by(iso3) %>%
       summarise(grades_after = n_distinct(grade_numeric), .groups = "drop")
@@ -581,8 +619,8 @@ server <- function(input, output, session) {
           xanchor = "center"
         ),
         xaxis = list(
-          title = "<b>Grade (1-10)</b>",
-          range = c(0, 11),
+          title = "<b>Grade (1-9)</b>",
+          range = c(0, 10),
           dtick = 1,
           gridcolor = "#E5E5E5"
         ),
@@ -605,7 +643,14 @@ server <- function(input, output, session) {
         plot_bgcolor = "#F8F8F8",
         paper_bgcolor = "white",
         autosize = FALSE,
+        width = 900,
         height = 900
+      ) %>%
+      config(
+        displayModeBar = TRUE,
+        displaylogo = FALSE,
+        staticPlot = FALSE,
+        responsive = FALSE
       )
     
     return(fig)
@@ -642,12 +687,17 @@ server <- function(input, output, session) {
                            paste(median_lines, collapse = "\n"), "\n")
     }
 
+    # Calculate missing grades info
+    max_missing <- input$missing_grades_tolerance - 1
+    min_required <- 9 - max_missing
+
     summary_text <- paste0(
       "Filtered Data:\n",
       "- Total observations: ", nrow(df), "\n",
       "- Excluded combinations (n ≤ ", input$min_observations, "): ", excluded_combinations, "\n",
       "- Excluded countries (all grades filtered): ", excluded_countries, "\n",
       "- Countries with missing grades: ", countries_missing_cats, "\n",
+      "- Missing grades tolerance: ", input$missing_grades_tolerance, " (countries need ≥ ", min_required, " grades)\n",
       "- Unique countries: ", length(unique(df$iso3)), "\n",
       "- Grade range: ", min(df$grade_numeric, na.rm = TRUE), " - ",
                          max(df$grade_numeric, na.rm = TRUE), "\n",
@@ -675,9 +725,10 @@ server <- function(input, output, session) {
           <ul>
             <li><em>Category</em>: Defaults to 'All' (aggregated across all student categories)</li>
             <li><em>Subject</em>: Defaults to 'reading' (switch to 'numeracy' to see math proficiency)</li>
-            <li><em>Income Level</em>: Multi-select checkboxes - select one or more income levels to compare</li>
-            <li><em>Region</em>: Multi-select checkboxes - select one or more regions to compare</li>
+            <li><em>Income Level</em>: Multi-select dropdown - select one or more income levels to compare</li>
+            <li><em>Region</em>: Multi-select dropdown - select one or more regions to compare</li>
             <li><em>Minimum Observations</em>: Exclude country-grade combinations with small sample sizes (default: 50)</li>
+            <li><em>Missing Grades Tolerance</em>: Maximum missing grades allowed per country (1 = complete data with all 9 grades, 9 = all countries included, default: 9)</li>
           </ul>
         </li>
         <li><strong>Hover:</strong> Hover over data points to see comprehensive information including grade and proficiency values</li>
@@ -696,7 +747,7 @@ server <- function(input, output, session) {
       <ul>
         <li>Individual country lines (grey, opacity 0.6) represent each country's learning gradient</li>
         <li>Bold lines show median proficiency across countries for each grade, grouped by Africa vs. non-Africa</li>
-        <li>X-axis shows grades from 1 to 10 (discrete grade levels)</li>
+        <li>X-axis shows grades from 1 to 9 (discrete grade levels)</li>
         <li>Y-axis shows LOESS smoothed proficiency values as percentages (0-100%)</li>
         <li>LOESS smoothing (span=1) applied to raw proficiency rates for each country-category-subject combination</li>
         <li>All filters work in real-time</li>
@@ -708,6 +759,7 @@ server <- function(input, output, session) {
         <li>Use Income Level and Region checkboxes to compare specific groups side-by-side</li>
         <li>Switch between 'reading' and 'numeracy' to compare literacy vs mathematics proficiency</li>
         <li>Adjust minimum observations to balance data quality vs coverage - higher values = more reliable but fewer countries</li>
+        <li>Use missing grades tolerance to control data completeness - lower values = more complete datasets, higher values = more countries included</li>
         <li>Spline interpolation provides smooth visual lines between data points</li>
         <li>The median lines provide regional benchmarks for comparison</li>
         <li>Click 'Reset All Filters' to return to default view</li>
@@ -778,16 +830,19 @@ server <- function(input, output, session) {
     }
     
     # Reset minimum observations to 50
-    updateNumericInput(session, "min_observations", value = 50)
-    
+    updateSliderInput(session, "min_observations", value = 50)
+
+    # Reset missing grades tolerance to 9
+    updateSliderInput(session, "missing_grades_tolerance", value = 9)
+
     # Reset income level to all selected
     if (!is.null(input$filter_income)) {
-      updateCheckboxGroupInput(session, "filter_income", selected = filter_columns$income_level)
+      updateSelectInput(session, "filter_income", selected = filter_columns$income_level)
     }
-    
+
     # Reset region to all selected
     if (!is.null(input$filter_region)) {
-      updateCheckboxGroupInput(session, "filter_region", selected = filter_columns$Region)
+      updateSelectInput(session, "filter_region", selected = filter_columns$Region)
     }
     
     # Reset wealth quintile to "Show All"
