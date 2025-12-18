@@ -74,25 +74,28 @@ ui <- fluidPage(
       h4("Filters"),
       
       # Wealth groups selection
-      checkboxGroupInput("filter_wealth",
-                        "Wealth Groups:",
-                        choices = filter_columns$wealth_categories,
-                        selected = filter_columns$wealth_categories),
-      
-      # Income Level: multi-select
+      selectInput("filter_wealth",
+                  "Wealth Groups:",
+                  choices = filter_columns$wealth_categories,
+                  selected = filter_columns$wealth_categories,
+                  multiple = TRUE),
+
+      # Income Level: multi-select dropdown
       if ("income_level" %in% names(filter_columns)) {
-        checkboxGroupInput("filter_income",
-                          "Income Level:",
-                          choices = filter_columns$income_level,
-                          selected = filter_columns$income_level)
+        selectInput("filter_income",
+                    "Income Level:",
+                    choices = filter_columns$income_level,
+                    selected = filter_columns$income_level,
+                    multiple = TRUE)
       },
-      
-      # Region: multi-select
+
+      # Region: multi-select dropdown
       if ("Region" %in% names(filter_columns)) {
-        checkboxGroupInput("filter_region",
-                          "Region:",
-                          choices = filter_columns$Region,
-                          selected = filter_columns$Region)
+        selectInput("filter_region",
+                    "Region:",
+                    choices = filter_columns$Region,
+                    selected = filter_columns$Region,
+                    multiple = TRUE)
       },
       
       # Year filter
@@ -103,14 +106,24 @@ ui <- fluidPage(
                     selected = "<Show All>")
       },
       
-      # Minimum observations filter
-      numericInput("min_observations",
-                   "Minimum Observations (n):",
-                   value = 50,
-                   min = 0,
-                   step = 10),
-      
-      helpText("Excludes country-grade combinations with fewer observations than this threshold."),
+      # Minimum observations filter (slider)
+      sliderInput("min_observations",
+                  "Minimum Observations (n):",
+                  min = 0,
+                  max = 100,
+                  value = 50,
+                  step = 5),
+
+      # Missing combinations tolerance filter (slider)
+      sliderInput("missing_combinations_tolerance",
+                  "Missing Combinations Tolerance:",
+                  min = 1,
+                  max = 15,
+                  value = 15,
+                  step = 1),
+
+      helpText("Minimum observations: Excludes individual combinations with fewer observations than this threshold."),
+      helpText("Missing combinations tolerance: Maximum missing combinations allowed per country (1 = complete data with all 15 combinations, 15 = all countries included). Each country should have 15 combinations: 3 grade bands × 5 wealth quintiles (Poorest-Richest, excluding 'All')."),
       
       hr(),
       
@@ -124,17 +137,17 @@ ui <- fluidPage(
       
       fluidRow(
         column(
-          width = 8,
-          # Plot output - wider for three facets
-          plotlyOutput("main_chart", height = "400px", width = "100%")
+          width = 9,
+          # Plot output - fixed dimensions for two facets
+          plotlyOutput("main_chart", height = "900px", width = "1200px")
         ),
         column(
-          width = 4,
-          # Missing countries list
+          width = 3,
+          # Missing combinations list
           wellPanel(
-            h4("Countries with Missing Grade Bands"),
+            h4("Countries with Missing Combinations"),
             htmlOutput("missing_countries_list"),
-            style = "height: 400px; overflow-y: auto;"
+            style = "height: 900px; overflow-y: auto;"
           )
         )
       ),
@@ -200,40 +213,90 @@ server <- function(input, output, session) {
     # Count before minimum observations filter (AFTER all other filters)
     rows_before_n_filter <- nrow(df)
     countries_before <- unique(df$iso3)
-    
-    # Track country-wealth combinations with their grade bands before minimum observations filter
-    # This now only considers the filtered wealth groups
-    # We group by BOTH iso3 and category (wealth group) because each wealth group is a separate line
-    country_wealth_grades_before <- df %>%
-      group_by(iso3, category) %>%
-      summarise(grades_before = n_distinct(grade_band), .groups = "drop")
-    
+
+    # Track combinations (grade band × wealth quintile) before minimum observations filter
+    # Expected: 3 grade bands × 5 wealth quintiles = 15 combinations per country
+    # Exclude "All" from expected combinations as it's an aggregate, not a quintile
+    country_combinations_before <- df %>%
+      filter(category != "All") %>%
+      group_by(iso3) %>%
+      summarise(
+        combinations_before = n(),
+        unique_bands = n_distinct(grade_band),
+        unique_wealth = n_distinct(category),
+        .groups = "drop"
+      )
+
     # Apply minimum observations filter
     if (!is.null(input$min_observations) && input$min_observations > 0) {
       df <- df %>% filter(n > input$min_observations)
     }
-    
-    # Count after minimum observations filter
+
+    # Track after minimum observations filter
     rows_after_n_filter <- nrow(df)
     excluded_combinations <- rows_before_n_filter - rows_after_n_filter
+
+    # Count combinations per country after minimum observations filter (excluding "All")
+    country_combinations_after <- df %>%
+      filter(category != "All") %>%
+      group_by(iso3) %>%
+      summarise(
+        combinations_after = n(),
+        .groups = "drop"
+      )
+
+    # Calculate missing combinations per country
+    country_missing_combinations <- country_combinations_before %>%
+      left_join(country_combinations_after, by = "iso3") %>%
+      mutate(
+        combinations_after = ifelse(is.na(combinations_after), 0, combinations_after),
+        missing_combinations = combinations_before - combinations_after
+      ) %>%
+      filter(missing_combinations > 0)
+
+    # Create detailed missing combinations info for the table BEFORE tolerance filter
+    # This shows all countries with any missing combinations, regardless of tolerance
+    # Note: Only counting wealth quintiles (not "All"), so max is 15 combinations
+    missing_combinations_detail <- country_missing_combinations %>%
+      mutate(
+        present_combinations = combinations_after,
+        missing_count = missing_combinations,
+        missing_percentage = round((missing_combinations / 15) * 100, 1),  # Out of 15 expected
+        expected_total = 15
+      ) %>%
+      arrange(desc(missing_count), iso3)
+
+    # Apply missing combinations tolerance filter
+    countries_dropped <- c()
+    if (!is.null(input$missing_combinations_tolerance)) {
+      max_missing_allowed <- input$missing_combinations_tolerance - 1
+
+      # Find countries with acceptable data completeness
+      countries_with_sufficient_data <- country_combinations_after %>%
+        left_join(
+          country_combinations_before %>% select(iso3, combinations_before),
+          by = "iso3"
+        ) %>%
+        mutate(
+          missing = combinations_before - combinations_after
+        ) %>%
+        filter(missing <= max_missing_allowed) %>%
+        pull(iso3)
+
+      # Track which countries were dropped
+      countries_dropped <- setdiff(unique(countries_before), countries_with_sufficient_data)
+
+      df <- df %>% filter(iso3 %in% countries_with_sufficient_data)
+    }
+
+    # Update final counts
     countries_after <- unique(df$iso3)
-    
-    # Track country-wealth combinations with their grade bands after minimum observations filter
-    country_wealth_grades_after <- df %>%
-      group_by(iso3, category) %>%
-      summarise(grades_after = n_distinct(grade_band), .groups = "drop")
-    
-    # Find country-wealth combinations with missing grade bands
-    # (had data before, lost some or all grades after)
-    # Only within the filtered wealth groups
-    country_wealth_missing_grades <- country_wealth_grades_before %>%
-      left_join(country_wealth_grades_after, by = c("iso3", "category")) %>%
-      mutate(grades_after = ifelse(is.na(grades_after), 0, grades_after)) %>%
-      filter(grades_after < grades_before)
-    
-    # Count unique COUNTRIES (not country-wealth combinations) with missing grade bands
-    # This is clearer: how many countries have at least one wealth group with missing grade bands
-    countries_missing_categories <- n_distinct(country_wealth_missing_grades$iso3)
+    countries_missing_combinations_count <- nrow(missing_combinations_detail)
+    countries_dropped_count <- length(countries_dropped)
+
+    # Add dropped flag to missing combinations detail
+    missing_combinations_detail <- missing_combinations_detail %>%
+      mutate(dropped = iso3 %in% countries_dropped)
     
     # Create ordered factors
     df <- df %>%
@@ -244,8 +307,9 @@ server <- function(input, output, session) {
     
     # Store excluded counts as attributes
     attr(df, "excluded_combinations") <- excluded_combinations
-    attr(df, "countries_missing_categories") <- countries_missing_categories
-    attr(df, "missing_grades_detail") <- country_wealth_missing_grades
+    attr(df, "countries_missing_combinations") <- countries_missing_combinations_count
+    attr(df, "countries_dropped") <- countries_dropped_count
+    attr(df, "missing_combinations_detail") <- missing_combinations_detail
     
     return(df)
   })
@@ -276,7 +340,7 @@ server <- function(input, output, session) {
           } else {
             median(proficiency_rate, na.rm = TRUE)
           },
-          n_systems = n_distinct(iso3),
+          n_countrys = n_distinct(iso3),
           total_children = sum(n, na.rm = TRUE),
           .groups = "drop"
         ) %>%
@@ -295,8 +359,11 @@ server <- function(input, output, session) {
     # Create subplot with three facets
     fig <- plot_ly()
     
-    # Add traces for each facet
-    for (facet_name in c("All", "Africa", "Non-Africa")) {
+    # Store "All" category data for annotations
+    all_category_annotations <- list()
+    
+    # Add traces for each facet (only Africa and Non-Africa, excluding All)
+    for (facet_name in c("Africa", "Non-Africa")) {
       facet_data <- all_data %>% filter(facet == facet_name)
       
       if (nrow(facet_data) == 0) next
@@ -317,13 +384,36 @@ server <- function(input, output, session) {
           "<b>", facet_name, " - ", wealth, "</b><br>",
           "Grade: ", w_data$grade_band_ordered, "<br>",
           "Proficiency: ", round(w_data$proficiency_agg, 1), "%<br>",
-          "N systems: ", w_data$n_systems, "<br>",
+          "N countrys: ", w_data$n_countrys, "<br>",
           "Total children: ", format(w_data$total_children, big.mark = ",")
         )
         
         # Determine if this trace should show in legend (only show once per wealth group)
-        show_legend <- (facet_name == "All")
+        show_legend <- (facet_name == "Africa")
         legend_name <- as.character(wealth)
+        
+        # Store "All" category data for annotations
+        if (wealth == "All") {
+          for (i in 1:nrow(w_data)) {
+            all_category_annotations[[length(all_category_annotations) + 1]] <- list(
+              x = as.character(w_data$grade_band_ordered[i]),
+              y = w_data$proficiency_agg[i],
+              text = paste0("<b>", round(w_data$proficiency_agg[i], 1), "%</b>"),
+              xref = if(facet_name == "Africa") "x" else "x2",
+              yref = if(facet_name == "Africa") "y" else "y2",
+              showarrow = FALSE,
+              xanchor = "left",
+              yanchor = "top",
+              xshift = 8,
+              yshift = -8,
+              font = list(
+                size = 12,
+                color = "#000000",
+                family = "Arial Black, Arial, sans-serif"
+              )
+            )
+          }
+        }
         
         fig <- fig %>%
           add_trace(
@@ -335,17 +425,17 @@ server <- function(input, output, session) {
             name = legend_name,
             legendgroup = legend_name,
             showlegend = show_legend,
-            text = hover_text,
+            hovertext = hover_text,
             hoverinfo = 'text',
             line = list(width = line_width, color = wealth_colors[[as.character(wealth)]]),
             marker = list(size = 6, color = wealth_colors[[as.character(wealth)]]),
-            xaxis = if(facet_name == "All") "x" else if(facet_name == "Africa") "x2" else "x3",
-            yaxis = if(facet_name == "All") "y" else if(facet_name == "Africa") "y2" else "y3"
+            xaxis = if(facet_name == "Africa") "x" else "x2",
+            yaxis = if(facet_name == "Africa") "y" else "y2"
           )
       }
     }
     
-    # Layout with three subplots in one row
+    # Layout with two subplots in one row
     agg_label <- tools::toTitleCase(input$agg_method)
     
     fig <- fig %>%
@@ -353,47 +443,35 @@ server <- function(input, output, session) {
         title = list(
           text = paste0("<b>Wealth Gradients</b><br><sub>",
                        tools::toTitleCase(input$subject), " - ",
-                       agg_label, " across systems</sub>"),
+                       agg_label, " across countrys</sub>"),
           x = 0.5, xanchor = "center"
         ),
-        # All systems facet
+        # Africa facet
         xaxis = list(
-          domain = c(0, 0.3),
-          title = list(text = "<b>All</b>", standoff = 10),
+          domain = c(0, 0.40),
+          title = list(text = "<b>Africa</b>", standoff = 10),
           type = "category",
           categoryorder = "array",
           categoryarray = valid_grade_bands,
-          tickfont = list(size = 9)
+          tickfont = list(size = 10),
+          automargin = TRUE
         ),
         yaxis = list(
           title = "<b>% with foundational skills</b>",
           range = c(0, 100),
           gridcolor = "#E5E5E5"
         ),
-        # Africa facet
-        xaxis2 = list(
-          domain = c(0.35, 0.65),
-          title = list(text = "<b>Africa</b>", standoff = 10),
-          type = "category",
-          categoryorder = "array",
-          categoryarray = valid_grade_bands,
-          tickfont = list(size = 9)
-        ),
-        yaxis2 = list(
-          range = c(0, 100),
-          showticklabels = FALSE,
-          gridcolor = "#E5E5E5"
-        ),
         # Non-Africa facet
-        xaxis3 = list(
-          domain = c(0.7, 1),
+        xaxis2 = list(
+          domain = c(0.52, 0.92),
           title = list(text = "<b>Non-Africa</b>", standoff = 10),
           type = "category",
           categoryorder = "array",
           categoryarray = valid_grade_bands,
-          tickfont = list(size = 9)
+          tickfont = list(size = 10),
+          automargin = TRUE
         ),
-        yaxis3 = list(
+        yaxis2 = list(
           range = c(0, 100),
           showticklabels = FALSE,
           gridcolor = "#E5E5E5"
@@ -408,12 +486,22 @@ server <- function(input, output, session) {
           bordercolor = "#CCCCCC",
           borderwidth = 1
         ),
-        margin = list(r = 180, t = 100, l = 80, b = 80),
+        annotations = all_category_annotations,
+        margin = list(r = 250, t = 100, l = 80, b = 80),
         plot_bgcolor = "#F8F8F8",
         paper_bgcolor = "white",
-        showlegend = TRUE
+        showlegend = TRUE,
+        autosize = FALSE,
+        width = 1200,
+        height = 900
+      ) %>%
+      config(
+        displayModeBar = TRUE,
+        displaylogo = FALSE,
+        staticPlot = FALSE,
+        responsive = FALSE
       )
-    
+
     return(fig)
   })
   
@@ -421,12 +509,13 @@ server <- function(input, output, session) {
   output$data_summary <- renderText({
     df <- filtered_data()
     excluded_count <- attr(df, "excluded_combinations")
-    countries_missing_cats <- attr(df, "countries_missing_categories")
-    
-    all_systems <- length(unique(df$iso3))
-    africa_systems <- length(unique(df$iso3[df$is_africa == TRUE]))
-    non_africa_systems <- length(unique(df$iso3[df$is_africa == FALSE]))
-    
+    countries_missing_combos <- attr(df, "countries_missing_combinations")
+    countries_dropped <- attr(df, "countries_dropped")
+
+    all_countrys <- length(unique(df$iso3))
+    africa_countrys <- length(unique(df$iso3[df$is_africa == TRUE]))
+    non_africa_countrys <- length(unique(df$iso3[df$is_africa == FALSE]))
+
     # Get year information
     year_info <- ""
     if ("year" %in% colnames(df)) {
@@ -434,23 +523,29 @@ server <- function(input, output, session) {
       if (length(years_used) == 1) {
         year_info <- paste0("- Year: ", years_used, "\n")
       } else {
-        year_info <- paste0("- Years: ", paste(years_used, collapse = ", "), 
+        year_info <- paste0("- Years: ", paste(years_used, collapse = ", "),
                            " (latest per country)\n")
       }
     }
-    
+
+    # Calculate missing combinations info
+    max_missing_allowed <- input$missing_combinations_tolerance - 1
+    min_required_combos <- 15 - max_missing_allowed
+
     summary_text <- paste0(
       "Filtered Data:\n",
-      "- Total country-grade combinations: ", nrow(df), "\n",
+      "- Total combinations: ", nrow(df), "\n",
       "- Excluded combinations (n ≤ ", input$min_observations, "): ", excluded_count, "\n",
-      "- Countries with missing grade bands: ", countries_missing_cats, "\n",
-      "- All systems: ", all_systems, "\n",
-      "- Africa systems: ", africa_systems, "\n",
-      "- Non-Africa systems: ", non_africa_systems, "\n",
+      "- Countries with missing combinations: ", countries_missing_combos, "\n",
+      "- Countries dropped (tolerance filter): ", countries_dropped, "\n",
+      "- Missing combinations tolerance: ", input$missing_combinations_tolerance, " (countries need ≥ ", min_required_combos, "/15 combinations)\n",
+      "- All countrys: ", all_countrys, "\n",
+      "- Africa countrys: ", africa_countrys, "\n",
+      "- Non-Africa countrys: ", non_africa_countrys, "\n",
       "- Wealth groups: ", length(unique(df$category)), "\n",
       year_info
     )
-    
+
     return(summary_text)
   })
   
@@ -460,81 +555,91 @@ server <- function(input, output, session) {
       "<p><strong>Visual 2: Wealth Gradients</strong></p>
       <ul>
         <li><strong>Purpose:</strong> Show inequality in foundational skills by household wealth</li>
-        <li><strong>Facets:</strong> Three panels showing All systems, Africa only, and Non-Africa only</li>
-        <li><strong>Blue thick line:</strong> All children (aggregated)</li>
+        <li><strong>Facets:</strong> Two panels showing Africa and Non-Africa countrys</li>
+        <li><strong>Blue thick line:</strong> All children (aggregated) - <em>with bolded data labels showing percentages</em></li>
         <li><strong>Red to green gradient:</strong> Poorest → Richest quintiles</li>
       </ul>
       <p><strong>Interpretation:</strong></p>
       <ul>
         <li>Only the latest year of data is used for each country (no year mixing)</li>
-        <li>Aggregation method (mean/median) across systems can be selected in filters</li>
+        <li>Countries dropped by tolerance filter are excluded from calculations</li>
+        <li>Aggregation method (mean/median) across countrys can be selected in filters</li>
         <li>Mean (default) gives arithmetic average; each country contributes equally</li>
         <li>Median is more robust to outliers</li>
         <li>Larger gaps between lines indicate greater inequality</li>
-        <li>Compare patterns across All/Africa/Non-Africa to see regional differences</li>
+        <li>Compare patterns across Africa/Non-Africa to see regional differences</li>
+      </ul>
+      <p><strong>Data Structure:</strong></p>
+      <ul>
+        <li>Each country should have <strong>15 combinations</strong>: 3 grade bands × 5 wealth quintiles (Poorest, Second, Middle, Fourth, Richest)</li>
+        <li>Note: 'All' category is not counted in the 15 combinations as it's an aggregate</li>
+        <li>Minimum observations filter excludes individual combinations with low sample sizes</li>
+        <li>Missing combinations tolerance filters out entire countries with too much missing data</li>
       </ul>
       <p><strong>How to use filters:</strong></p>
       <ul>
         <li><strong>Subject:</strong> Switch between reading and numeracy</li>
         <li><strong>Aggregation Method:</strong> Choose mean (default) or median</li>
-        <li><strong>Minimum Observations:</strong> Exclude country-grade combinations with small sample sizes (default: 50)</li>
-        <li><strong>Wealth Groups:</strong> Select which wealth quintiles to display</li>
-        <li><strong>Income Level & Region:</strong> Multi-select to focus on specific contexts</li>
+        <li><strong>Minimum Observations:</strong> Exclude individual combinations with small sample sizes (default: 50)</li>
+        <li><strong>Missing Combinations Tolerance:</strong> Maximum missing combinations allowed per country out of 15 (1 = all 15 required, 15 = all countries included, default: 15)</li>
+        <li><strong>Wealth Groups:</strong> Multi-select dropdown - select which wealth quintiles to display</li>
+        <li><strong>Income Level & Region:</strong> Multi-select dropdowns - focus on specific contexts</li>
         <li><strong>Reset All Filters:</strong> Return to default view</li>
       </ul>
-      <p><em>Lines show unweighted aggregates across education systems. Each country contributes equally.</em></p>"
+      <p><strong>Tips:</strong></p>
+      <ul>
+        <li>Use minimum observations to control data quality at the combination level</li>
+        <li>Use missing combinations tolerance to control data completeness at the country level - lower values = more complete countries only, higher values = include countries with partial data</li>
+        <li>The table on the right shows how many combinations are missing for each affected country and the percentage of data loss</li>
+        <li>The chart shows one line per wealth group, aggregated across countries within each facet</li>
+      </ul>
+      <p><em>Lines show unweighted aggregates across education countrys. Each country contributes equally.</em></p>"
     )
   })
   
-  # Missing countries list output
+  # Missing combinations list output
   output$missing_countries_list <- renderUI({
     df <- filtered_data()
-    missing_detail <- attr(df, "missing_grades_detail")
-    
+    missing_detail <- attr(df, "missing_combinations_detail")
+
     if (is.null(missing_detail) || nrow(missing_detail) == 0) {
-      return(HTML("<p style='color: green;'><strong>No countries with missing grade bands!</strong></p>
-                   <p>All country-wealth combinations have complete data across all grade bands.</p>"))
+      return(HTML("<p style='color: green;'><strong>All countries have complete data!</strong></p>
+                   <p>All countries have all 15 combinations (3 grade bands × 5 wealth quintiles).</p>"))
     }
-    
-    # Group by country and aggregate the affected wealth groups
-    missing_by_country <- missing_detail %>%
-      group_by(iso3) %>%
-      summarise(
-        wealth_groups = paste(category, collapse = ", "),
-        grades_before = sum(grades_before),
-        grades_after = sum(grades_after),
-        .groups = "drop"
-      ) %>%
-      mutate(missing = grades_before - grades_after) %>%
-      arrange(iso3)
-    
-    # Generate HTML table rows
-    table_rows <- lapply(1:nrow(missing_by_country), function(i) {
-      row <- missing_by_country[i, ]
+
+    # Count dropped countries
+    dropped_count <- sum(missing_detail$dropped, na.rm = TRUE)
+    affected_count <- nrow(missing_detail)
+
+    # Generate HTML table rows with light red background for dropped countries
+    table_rows <- lapply(1:nrow(missing_detail), function(i) {
+      row <- missing_detail[i, ]
+      bg_color <- if (row$dropped) "background-color: #ffcccc;" else ""
       paste0(
-        "<tr>",
+        "<tr style='", bg_color, "'>",
         "<td style='padding: 5px; border-bottom: 1px solid #ddd;'><strong>", row$iso3, "</strong></td>",
-        "<td style='padding: 5px; border-bottom: 1px solid #ddd; font-size: 0.85em;'>", row$wealth_groups, "</td>",
-        "<td style='padding: 5px; border-bottom: 1px solid #ddd; text-align: center;'>", row$missing, "/", row$grades_before, "</td>",
+        "<td style='padding: 5px; border-bottom: 1px solid #ddd; text-align: center;'><strong>", row$missing_count, "/15</strong></td>",
+        "<td style='padding: 5px; border-bottom: 1px solid #ddd; text-align: center;'><strong>", row$missing_percentage, "%</strong></td>",
         "</tr>"
       )
     })
-    
+
     HTML(paste0(
-      "<p style='color: #d9534f; margin-bottom: 10px;'><strong>", nrow(missing_by_country), 
-      " countries affected</strong></p>",
+      "<p style='color: #d9534f; margin-bottom: 10px;'><strong>", affected_count,
+      " countries affected | ", dropped_count, " dropped</strong></p>",
       "<table style='width: 100%; font-size: 0.9em; border-collapse: collapse;'>",
       "<thead>",
       "<tr style='background-color: #f5f5f5;'>",
       "<th style='padding: 5px; text-align: left; border-bottom: 2px solid #ddd;'>Country</th>",
-      "<th style='padding: 5px; text-align: left; border-bottom: 2px solid #ddd;'>Wealth Groups</th>",
       "<th style='padding: 5px; text-align: center; border-bottom: 2px solid #ddd;'>Missing</th>",
+      "<th style='padding: 5px; text-align: center; border-bottom: 2px solid #ddd;'>%</th>",
       "</tr>",
       "</thead>",
       "<tbody>",
       paste(table_rows, collapse = ""),
       "</tbody>",
-      "</table>"
+      "</table>",
+      "<p style='font-size: 0.85em; color: #666; margin-top: 10px;'><em>Light red = dropped by tolerance filter</em></p>"
     ))
   })
   
@@ -542,15 +647,16 @@ server <- function(input, output, session) {
   observeEvent(input$reset_filters, {
     updateSelectInput(session, "subject", selected = "reading")
     updateSelectInput(session, "agg_method", selected = "mean")
-    updateNumericInput(session, "min_observations", value = 50)
-    
-    updateCheckboxGroupInput(session, "filter_wealth", selected = filter_columns$wealth_categories)
-    
+    updateSliderInput(session, "min_observations", value = 50)
+    updateSliderInput(session, "missing_combinations_tolerance", value = 15)
+
+    updateSelectInput(session, "filter_wealth", selected = filter_columns$wealth_categories)
+
     if (!is.null(input$filter_income)) {
-      updateCheckboxGroupInput(session, "filter_income", selected = filter_columns$income_level)
+      updateSelectInput(session, "filter_income", selected = filter_columns$income_level)
     }
     if (!is.null(input$filter_region)) {
-      updateCheckboxGroupInput(session, "filter_region", selected = filter_columns$Region)
+      updateSelectInput(session, "filter_region", selected = filter_columns$Region)
     }
     if (!is.null(input$filter_year)) {
       updateSelectInput(session, "filter_year", selected = "<Show All>")

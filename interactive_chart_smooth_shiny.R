@@ -161,9 +161,9 @@ ui <- fluidPage(
       sliderInput("min_observations",
                   "Minimum Observations (n):",
                   min = 0,
-                  max = 200,
+                  max = 100,
                   value = 50,
-                  step = 10),
+                  step = 5),
 
       # Missing grades tolerance filter (slider)
       sliderInput("missing_grades_tolerance",
@@ -325,28 +325,59 @@ server <- function(input, output, session) {
       }
     }
     
-    # Track after filtering
-    countries_after <- unique(df$iso3)
+    # Track after minimum observations filter (BEFORE tolerance filter)
+    countries_after_min_obs <- unique(df$iso3)
     rows_after_n_filter <- nrow(df)
     
-    # Track countries with their grade count after filter
-    country_grades_after <- df %>%
+    # Track countries with their grade count after minimum observations filter (BEFORE tolerance)
+    country_grades_after_min_obs <- df %>%
       group_by(iso3) %>%
-      summarise(grades_after = n_distinct(grade_numeric), .groups = "drop")
+      summarise(grades_after_min_obs = n_distinct(grade_numeric), .groups = "drop")
+
+    # Find countries with missing grades (had data before, lost some or all grades after min_obs filter)
+    # This includes both partially and completely excluded countries
+    # Calculate this BEFORE the tolerance filter to track all affected countries
+    countries_with_missing_grades_before_tolerance <- country_grades_before %>%
+      left_join(country_grades_after_min_obs, by = "iso3") %>%
+      mutate(grades_after_min_obs = ifelse(is.na(grades_after_min_obs), 0, grades_after_min_obs)) %>%
+      filter(grades_after_min_obs < grades_before)  # Includes both partial and complete exclusions
 
     # Apply missing grades tolerance filter
+    countries_dropped_by_tolerance <- c()
     if (!is.null(input$missing_grades_tolerance)) {
       # Calculate expected grades (1-9 = 9 grades total)
       expected_grades <- 9
       max_missing_allowed <- input$missing_grades_tolerance - 1
       min_required_grades <- expected_grades - max_missing_allowed
 
-      # Filter countries that have at least the minimum required grades
-      countries_with_sufficient_grades <- df %>%
-        group_by(iso3) %>%
-        summarise(actual_grades = n_distinct(grade_numeric), .groups = "drop") %>%
+      # Determine which countries meet the tolerance requirement
+      # Check all countries that had data before min_obs filter
+      # For countries still in df, use their actual grade count
+      # For countries not in df (lost all grades), they have 0 grades
+      all_countries_to_check <- unique(c(
+        countries_after_min_obs,
+        countries_with_missing_grades_before_tolerance$iso3
+      ))
+      
+      # Calculate actual grades for each country
+      country_actual_grades <- country_grades_after_min_obs %>%
+        right_join(
+          data.frame(iso3 = all_countries_to_check),
+          by = "iso3"
+        ) %>%
+        mutate(
+          actual_grades = ifelse(is.na(grades_after_min_obs), 0, grades_after_min_obs)
+        )
+      
+      # Countries with sufficient grades
+      countries_with_sufficient_grades <- country_actual_grades %>%
         filter(actual_grades >= min_required_grades) %>%
         pull(iso3)
+
+      # Track which countries were dropped by the tolerance filter
+      countries_dropped_by_tolerance <- all_countries_to_check[
+        !all_countries_to_check %in% countries_with_sufficient_grades
+      ]
 
       df <- df %>% filter(iso3 %in% countries_with_sufficient_grades)
     }
@@ -355,22 +386,23 @@ server <- function(input, output, session) {
     countries_after <- unique(df$iso3)
     rows_after_n_filter <- nrow(df)
 
-    # Recalculate grade counts after missing grades filter
+    # Recalculate grade counts after missing grades filter (for final data)
     country_grades_after <- df %>%
       group_by(iso3) %>%
       summarise(grades_after = n_distinct(grade_numeric), .groups = "drop")
     
-    # Find countries with missing grades (had data before, lost some or all grades after)
-    # This includes both partially and completely excluded countries
-    countries_with_missing_grades <- country_grades_before %>%
-      left_join(country_grades_after, by = "iso3") %>%
-      mutate(grades_after = ifelse(is.na(grades_after), 0, grades_after)) %>%
-      filter(grades_after < grades_before)  # Includes both partial and complete exclusions
+    # Add dropped flag to missing grades detail
+    countries_with_missing_grades <- countries_with_missing_grades_before_tolerance %>%
+      mutate(
+        dropped = iso3 %in% countries_dropped_by_tolerance,
+        missing = grades_before - grades_after_min_obs
+      ) %>%
+      arrange(desc(missing), iso3)  # Order by missing grades descending
     
     countries_missing_categories <- nrow(countries_with_missing_grades)
+    countries_dropped_count <- length(countries_dropped_by_tolerance)
     
     excluded_combinations <- rows_before_n_filter - rows_after_n_filter
-    excluded_countries <- length(setdiff(countries_before, countries_after))
     
     # Calculate medians for benchmarks using data BEFORE category filter but AFTER other filters
     # Start fresh from data and apply same filters as above (year, subject, income, region, africa, min_obs)
@@ -435,7 +467,7 @@ server <- function(input, output, session) {
 
     # Store excluded counts as attributes
     attr(df, "excluded_combinations") <- excluded_combinations
-    attr(df, "excluded_countries") <- excluded_countries
+    attr(df, "countries_dropped") <- countries_dropped_count
     attr(df, "countries_missing_categories") <- countries_missing_categories
     attr(df, "missing_grades_detail") <- countries_with_missing_grades
     attr(df, "medians_summary") <- medians_summary
@@ -660,7 +692,7 @@ server <- function(input, output, session) {
   output$data_summary <- renderText({
     df <- filtered_data()
     excluded_combinations <- attr(df, "excluded_combinations")
-    excluded_countries <- attr(df, "excluded_countries")
+    countries_dropped <- attr(df, "countries_dropped")
     countries_missing_cats <- attr(df, "countries_missing_categories")
     medians_summary <- attr(df, "medians_summary")
 
@@ -695,8 +727,8 @@ server <- function(input, output, session) {
       "Filtered Data:\n",
       "- Total observations: ", nrow(df), "\n",
       "- Excluded combinations (n ≤ ", input$min_observations, "): ", excluded_combinations, "\n",
-      "- Excluded countries (all grades filtered): ", excluded_countries, "\n",
       "- Countries with missing grades: ", countries_missing_cats, "\n",
+      "- Countries dropped: ", countries_dropped, "\n",
       "- Missing grades tolerance: ", input$missing_grades_tolerance, " (countries need ≥ ", min_required, " grades)\n",
       "- Unique countries: ", length(unique(df$iso3)), "\n",
       "- Grade range: ", min(df$grade_numeric, na.rm = TRUE), " - ",
@@ -777,31 +809,32 @@ server <- function(input, output, session) {
                    <p>All countries have complete data across all grades.</p>"))
     }
     
-    # Add category and subject info from the filtered data
+    # Calculate percentage missing
     missing_with_context <- missing_detail %>%
-      arrange(iso3) %>%
       mutate(
-        missing = grades_before - grades_after,
         pct_missing = round((missing / grades_before) * 100, 1)
       )
     
-    # Generate HTML table rows
+    # Count dropped countries
+    dropped_count <- sum(missing_with_context$dropped, na.rm = TRUE)
+    affected_count <- nrow(missing_with_context)
+    
+    # Generate HTML table rows with light red background for dropped countries
     table_rows <- lapply(1:nrow(missing_with_context), function(i) {
       row <- missing_with_context[i, ]
+      bg_color <- if (row$dropped) "background-color: #ffcccc;" else ""
       paste0(
-        "<tr>",
+        "<tr style='", bg_color, "'>",
         "<td style='padding: 5px; border-bottom: 1px solid #ddd;'><strong>", row$iso3, "</strong></td>",
-        "<td style='padding: 5px; border-bottom: 1px solid #ddd; text-align: center;'>", 
-        row$missing, "/", row$grades_before, "</td>",
-        "<td style='padding: 5px; border-bottom: 1px solid #ddd; text-align: center; font-size: 0.85em;'>", 
-        row$pct_missing, "%</td>",
+        "<td style='padding: 5px; border-bottom: 1px solid #ddd; text-align: center;'><strong>", row$missing, "/", row$grades_before, "</strong></td>",
+        "<td style='padding: 5px; border-bottom: 1px solid #ddd; text-align: center;'><strong>", row$pct_missing, "%</strong></td>",
         "</tr>"
       )
     })
     
     HTML(paste0(
-      "<p style='color: #d9534f; margin-bottom: 10px;'><strong>", nrow(missing_with_context), 
-      " countries affected</strong></p>",
+      "<p style='color: #d9534f; margin-bottom: 10px;'><strong>", affected_count,
+      " countries affected | ", dropped_count, " dropped</strong></p>",
       "<table style='width: 100%; font-size: 0.9em; border-collapse: collapse;'>",
       "<thead>",
       "<tr style='background-color: #f5f5f5;'>",
@@ -813,7 +846,8 @@ server <- function(input, output, session) {
       "<tbody>",
       paste(table_rows, collapse = ""),
       "</tbody>",
-      "</table>"
+      "</table>",
+      "<p style='font-size: 0.85em; color: #666; margin-top: 10px;'><em>Light red = dropped by tolerance filter</em></p>"
     ))
   })
   

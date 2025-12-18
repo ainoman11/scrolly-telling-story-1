@@ -2569,78 +2569,168 @@ KIR,urban,reading,FALSE,6,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacif
 KIR,urban,reading,FALSE,7,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,43,43,54.2056074766355,43,Lower Secondary (Grades 7-9),49.126363826502555
 KIR,urban,reading,FALSE,8,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,34,34,57.83132530120479,34,Lower Secondary (Grades 7-9),59.22590485415951
 KIR,urban,reading,FALSE,9,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,9,9,72.2222222222222,9,Lower Secondary (Grades 7-9),72.2541059588496
-LAO,All,numeracy,FALSE,1,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,436,436,6.47024411290939,436,Primary (Grades 1-3),6.470244112909397
-LAO,All,numeracy,FALSE,2,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,886,886,15.2722067632309,886,Primary (Grades 1-3),15.272206763230894
-LAO,All,numeracy,FALSE,3,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,857,857,24.4549154006771,857,Primary (Grades 1-3),24.454915400677088
-LAO,All,numeracy,FALSE,4,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,846,846,36.7014114165499,846,Upper Primary (Grades 4-6),36.70141141654993
-LAO,All,reading,FALSE,1,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,436,436,5.87157720615671,436,Primary (Grades 1-3),5.871577206156714
-LAO,All,reading,FALSE,2,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,886,886,12.3875436638405,886,Primary (Grades 1-3),12.387543663840496
-LAO,All,reading,FALSE,3,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,857,857,20.220099661796702,857,Primary (Grades 1-3),20.2200996617967
-LAO,All,reading,FALSE,4,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,846,846,32.4933163514659,846,Upper Primary (Grades 4-6),32.49331635146592
-LAO,female,numeracy,FALSE,1,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,195,195,6.91370478670715,195,Primary (Grades 1-3),6.913704786707156
-LAO,female,numeracy,FALSE,2,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,451,451,14.718112778411399,451,Primary (Grades 1-3),14.718112778411397
-LAO,female,numeracy,FALSE,3,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,424,424,25.9208590259917,424,Primary (Grades 1-3),25.92085902599169
-LAO,female,numeracy,FALSE,4,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,438,438,40.7016304392605,438,Upper Primary (Grades 4-6),40.70163043926052
-LAO,female,reading,FALSE,1,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,195,195,6.20961490702868,195,Primary (Grades 1-3),6.2096149070286835
-LAO,female,reading,FALSE,2,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,451,451,12.460587759586101,451,Primary (Grades 1-3),12.460587759586097
-LAO,female,reading,FALSE,3,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,424,424,22.4437278573428,424,Primary (Grades 1-3),22.44372785734279
-LAO,female,reading,FALSE,4,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,438,438,35.8718341341436,438,Upper Primary (Grades 4-6),35.87183413414362
-LAO,fourth,numeracy,FALSE,1,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,50,50,15.342849010693898,50,Primary (Grades 1-3),15.342849010693902
-LAO,fourth,numeracy,FALSE,2,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,153,153,22.5997591893511,153,Primary (Grades 1-3),22.59975918935109
-LAO,fourth,numeracy,FALSE,3,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,178,178,32.9193626794258,178,Primary (Grades 1-3),32.919362679425774
-LAO,fourth,numeracy,FALSE,4,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,159,159,49.9011521791591,159,Upper Primary (Grades 4-6),49.90115217915913
-LAO,fourth,reading,FALSE,1,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,50,50,7.9114649877955605,50,Primary (Grades 1-3),7.911464987795564
-LAO,fourth,reading,FALSE,2,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,153,153,12.4582560633297,153,Primary (Grades 1-3),12.458256063329696
-LAO,fourth,reading,FALSE,3,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,178,178,29.0463001318495,178,Primary (Grades 1-3),29.046300131849485
-LAO,fourth,reading,FALSE,4,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,159,159,42.5465480602363,159,Upper Primary (Grades 4-6),42.546548060236326
-LAO,male,numeracy,FALSE,1,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,241,241,6.09229897505647,241,Primary (Grades 1-3),6.092298975056475
-LAO,male,numeracy,FALSE,2,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,435,435,15.9009706808904,435,Primary (Grades 1-3),15.9009706808904
-LAO,male,numeracy,FALSE,3,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,433,433,23.159724338,433,Primary (Grades 1-3),23.15972433799999
-LAO,male,numeracy,FALSE,4,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,408,408,32.0203450410798,408,Upper Primary (Grades 4-6),32.02034504107982
-LAO,male,reading,FALSE,1,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,241,241,5.58348017071631,241,Primary (Grades 1-3),5.583480170716314
-LAO,male,reading,FALSE,2,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,435,435,12.304656115769,435,Primary (Grades 1-3),12.304656115769
-LAO,male,reading,FALSE,3,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,433,433,18.2554788429231,433,Primary (Grades 1-3),18.255478842923093
-LAO,male,reading,FALSE,4,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,408,408,28.539766332921303,408,Upper Primary (Grades 4-6),28.539766332921317
-LAO,middle,numeracy,FALSE,1,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,79,79,6.41802705656984,79,Primary (Grades 1-3),6.418027056569846
-LAO,middle,numeracy,FALSE,2,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,170,170,11.0015442215708,170,Primary (Grades 1-3),11.001544221570793
-LAO,middle,numeracy,FALSE,3,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,153,153,31.028819151092403,153,Primary (Grades 1-3),31.02881915109239
-LAO,middle,numeracy,FALSE,4,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,166,166,45.872562072624,166,Upper Primary (Grades 4-6),45.87256207262403
-LAO,middle,reading,FALSE,1,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,79,79,5.01698557061077,79,Primary (Grades 1-3),5.016985570610774
-LAO,middle,reading,FALSE,2,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,170,170,12.2663235942534,170,Primary (Grades 1-3),12.266323594253398
-LAO,middle,reading,FALSE,3,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,153,153,22.9052539768233,153,Primary (Grades 1-3),22.905253976823293
-LAO,middle,reading,FALSE,4,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,166,166,29.268028224437398,166,Upper Primary (Grades 4-6),29.268028224437426
-LAO,poorest,numeracy,FALSE,1,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,159,159,0.942519923567871,159,Primary (Grades 1-3),0.9425199235678711
-LAO,poorest,numeracy,FALSE,2,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,202,202,0.659119996259269,202,Primary (Grades 1-3),0.6591199962592681
-LAO,poorest,numeracy,FALSE,3,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,196,196,6.29375111418259,196,Primary (Grades 1-3),6.2937511141825855
-LAO,poorest,numeracy,FALSE,4,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,196,196,17.2212454448668,196,Upper Primary (Grades 4-6),17.221245444866806
-LAO,poorest,reading,FALSE,1,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,159,159,2.82016092613003,159,Primary (Grades 1-3),2.8201609261300282
-LAO,poorest,reading,FALSE,2,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,202,202,0.883940179459896,202,Primary (Grades 1-3),0.8839401794598967
-LAO,poorest,reading,FALSE,3,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,196,196,5.16540620318737,196,Primary (Grades 1-3),5.1654062031873655
-LAO,poorest,reading,FALSE,4,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,196,196,19.1872252438362,196,Upper Primary (Grades 4-6),19.187225243836206
-LAO,richest,numeracy,FALSE,1,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,50,50,15.999576321983099,50,Primary (Grades 1-3),15.999576321983117
-LAO,richest,numeracy,FALSE,2,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,152,152,36.8281212967765,152,Primary (Grades 1-3),36.82812129677649
-LAO,richest,numeracy,FALSE,3,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,141,141,37.3416715176436,141,Primary (Grades 1-3),37.34167151764358
-LAO,richest,numeracy,FALSE,4,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,142,142,58.4495117490106,142,Upper Primary (Grades 4-6),58.449511749010625
-LAO,richest,reading,FALSE,1,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,50,50,16.4080636412621,50,Primary (Grades 1-3),16.40806364126211
-LAO,richest,reading,FALSE,2,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,152,152,29.3453498819908,152,Primary (Grades 1-3),29.345349881990792
-LAO,richest,reading,FALSE,3,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,141,141,32.5628712491603,141,Primary (Grades 1-3),32.56287124916028
-LAO,richest,reading,FALSE,4,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,142,142,59.0262712116532,142,Upper Primary (Grades 4-6),59.02627121165325
-LAO,second,numeracy,FALSE,1,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,98,98,5.53954946494698,98,Primary (Grades 1-3),5.53954946494698
-LAO,second,numeracy,FALSE,2,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,209,209,9.247185049866879,209,Primary (Grades 1-3),9.247185049866875
-LAO,second,numeracy,FALSE,3,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,189,189,18.2348139871554,189,Primary (Grades 1-3),18.23481398715539
-LAO,second,numeracy,FALSE,4,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,183,183,20.3280178668036,183,Upper Primary (Grades 4-6),20.328017866803616
-LAO,second,reading,FALSE,1,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,98,98,4.4069521466216,98,Primary (Grades 1-3),4.406952146621603
-LAO,second,reading,FALSE,2,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,209,209,9.233984261806299,209,Primary (Grades 1-3),9.233984261806295
-LAO,second,reading,FALSE,3,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,189,189,14.1170859190202,189,Primary (Grades 1-3),14.117085919020196
-LAO,second,reading,FALSE,4,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,183,183,19.9188395775357,183,Upper Primary (Grades 4-6),19.91883957753571
-LAO,urban,numeracy,FALSE,1,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,99,99,10.8085320369338,99,Primary (Grades 1-3),10.808532036933812
-LAO,urban,numeracy,FALSE,2,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,263,263,30.5287017108199,263,Primary (Grades 1-3),30.528701710819888
-LAO,urban,numeracy,FALSE,3,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,272,272,32.2273790789872,272,Primary (Grades 1-3),32.227379078987184
-LAO,urban,numeracy,FALSE,4,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,252,252,51.11189805798671,252,Upper Primary (Grades 4-6),51.111898057986735
-LAO,urban,reading,FALSE,1,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,99,99,9.761899889934481,99,Primary (Grades 1-3),9.761899889934487
-LAO,urban,reading,FALSE,2,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,263,263,22.6675532273729,263,Primary (Grades 1-3),22.667553227372892
-LAO,urban,reading,FALSE,3,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,272,272,28.2580797248995,272,Primary (Grades 1-3),28.258079724899474
-LAO,urban,reading,FALSE,4,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,252,252,48.737322171726696,252,Upper Primary (Grades 4-6),48.73732217172672
+LAO,All,numeracy,FALSE,1,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,886,886,15.2722067632309,886,Primary (Grades 1-3),13.510097386258074
+LAO,All,numeracy,FALSE,2,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,857,857,24.4549154006771,857,Primary (Grades 1-3),26.36474488056607
+LAO,All,numeracy,FALSE,3,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,846,846,36.7014114165499,846,Primary (Grades 1-3),38.71254369261358
+LAO,All,numeracy,FALSE,4,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,897,897,49.0177562071342,897,Upper Primary (Grades 4-6),50.3904882954369
+LAO,All,numeracy,FALSE,5,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,643,643,64.4630478687928,643,Upper Primary (Grades 4-6),61.93251354651203
+LAO,All,numeracy,FALSE,6,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,679,679,70.0815290842235,679,Upper Primary (Grades 4-6),69.22394741074103
+LAO,All,numeracy,FALSE,7,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,531,531,74.965060524006,531,Lower Secondary (Grades 7-9),77.50989219373486
+LAO,All,numeracy,FALSE,8,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,349,349,80.1367426627445,349,Lower Secondary (Grades 7-9),86.06666159832209
+LAO,All,numeracy,FALSE,9,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,40,40,99.065310077028,40,Lower Secondary (Grades 7-9),95.02650662748718
+LAO,All,reading,FALSE,1,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,886,886,12.3875436638405,886,Primary (Grades 1-3),10.519114408147846
+LAO,All,reading,FALSE,2,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,857,857,20.220099661796702,857,Primary (Grades 1-3),22.243300355777816
+LAO,All,reading,FALSE,3,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,846,846,32.4933163514659,846,Primary (Grades 1-3),34.15186792887687
+LAO,All,reading,FALSE,4,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,897,897,42.866395285284796,897,Upper Primary (Grades 4-6),46.04490720756894
+LAO,All,reading,FALSE,5,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,643,643,62.907300412575395,643,Upper Primary (Grades 4-6),58.49598121681743
+LAO,All,reading,FALSE,6,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,679,679,66.9877310406069,679,Upper Primary (Grades 4-6),67.91971007220374
+LAO,All,reading,FALSE,7,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,531,531,74.9779574374439,531,Lower Secondary (Grades 7-9),75.82917184731609
+LAO,All,reading,FALSE,8,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,349,349,80.4979271370065,349,Lower Secondary (Grades 7-9),82.05756106702671
+LAO,All,reading,FALSE,9,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,40,40,87.8496875060858,40,Lower Secondary (Grades 7-9),86.67691100199687
+LAO,female,numeracy,FALSE,1,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,451,451,14.718112778411399,451,Primary (Grades 1-3),13.645048803353577
+LAO,female,numeracy,FALSE,2,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,424,424,25.9208590259917,424,Primary (Grades 1-3),27.523415837031763
+LAO,female,numeracy,FALSE,3,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,438,438,40.7016304392605,438,Primary (Grades 1-3),40.32501020536194
+LAO,female,numeracy,FALSE,4,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,429,429,49.1614163149074,429,Upper Primary (Grades 4-6),51.958310215238185
+LAO,female,numeracy,FALSE,5,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,311,311,63.4318003708872,311,Upper Primary (Grades 4-6),62.64727423871912
+LAO,female,numeracy,FALSE,6,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,350,350,72.9952722279512,350,Upper Primary (Grades 4-6),69.07818424526445
+LAO,female,numeracy,FALSE,7,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,278,278,73.3182698063973,278,Lower Secondary (Grades 7-9),76.77677404625929
+LAO,female,numeracy,FALSE,8,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,183,183,77.63639547936499,183,Lower Secondary (Grades 7-9),84.90658712162164
+LAO,female,numeracy,FALSE,9,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,24,24,98.35617715158101,24,Lower Secondary (Grades 7-9),93.54282721969521
+LAO,female,reading,FALSE,1,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,451,451,12.460587759586101,451,Primary (Grades 1-3),10.844693694460755
+LAO,female,reading,FALSE,2,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,424,424,22.4437278573428,424,Primary (Grades 1-3),24.205102312942262
+LAO,female,reading,FALSE,3,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,438,438,35.8718341341436,438,Primary (Grades 1-3),37.08677548929591
+LAO,female,reading,FALSE,4,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,429,429,45.8278510440574,429,Upper Primary (Grades 4-6),49.30904907024462
+LAO,female,reading,FALSE,5,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,311,311,65.9843371082238,311,Upper Primary (Grades 4-6),61.38202958426295
+LAO,female,reading,FALSE,6,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,350,350,68.5470890895597,350,Upper Primary (Grades 4-6),70.09148628305078
+LAO,female,reading,FALSE,7,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,278,278,76.9558409132637,278,Lower Secondary (Grades 7-9),76.57218428705116
+LAO,female,reading,FALSE,8,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,183,183,78.4831168982119,183,Lower Secondary (Grades 7-9),80.79444684638187
+LAO,female,reading,FALSE,9,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,24,24,84.1045590930404,24,Lower Secondary (Grades 7-9),82.78335288904249
+LAO,fourth,numeracy,FALSE,1,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,153,153,22.5997591893511,153,Primary (Grades 1-3),21.37811279477074
+LAO,fourth,numeracy,FALSE,2,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,178,178,32.9193626794258,178,Primary (Grades 1-3),35.530905180356484
+LAO,fourth,numeracy,FALSE,3,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,159,159,49.9011521791591,159,Primary (Grades 1-3),47.91911624443883
+LAO,fourth,numeracy,FALSE,4,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,183,183,54.8159337670587,183,Upper Primary (Grades 4-6),58.54452409357408
+LAO,fourth,numeracy,FALSE,5,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,129,129,74.08090898181719,129,Upper Primary (Grades 4-6),67.29115657309843
+LAO,fourth,numeracy,FALSE,6,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,174,174,68.0009815764026,174,Upper Primary (Grades 4-6),73.13619049372014
+LAO,fourth,numeracy,FALSE,7,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,143,143,80.75210274932469,143,Lower Secondary (Grades 7-9),80.2240026397975
+LAO,fourth,numeracy,FALSE,8,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,83,83,82.9149717007881,83,Lower Secondary (Grades 7-9),88.05845502876284
+LAO,fourth,numeracy,FALSE,9,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,10,10,100,10,Lower Secondary (Grades 7-9),96.78862947923825
+LAO,fourth,reading,FALSE,1,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,153,153,12.4582560633297,153,Primary (Grades 1-3),13.157027489023598
+LAO,fourth,reading,FALSE,2,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,178,178,29.0463001318495,178,Primary (Grades 1-3),28.09513315094253
+LAO,fourth,reading,FALSE,3,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,159,159,42.5465480602363,159,Primary (Grades 1-3),41.10814821363414
+LAO,fourth,reading,FALSE,4,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,183,183,48.4042985229909,183,Upper Primary (Grades 4-6),52.18387714976521
+LAO,fourth,reading,FALSE,5,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,129,129,67.665171994872,129,Upper Primary (Grades 4-6),61.12866526052567
+LAO,fourth,reading,FALSE,6,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,174,174,62.5376489068267,174,Upper Primary (Grades 4-6),69.3333071878702
+LAO,fourth,reading,FALSE,7,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,143,143,80.2500518134979,143,Lower Secondary (Grades 7-9),75.87262105179117
+LAO,fourth,reading,FALSE,8,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,83,83,79.3765231152408,83,Lower Secondary (Grades 7-9),81.11993317615624
+LAO,fourth,reading,FALSE,9,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,10,10,85.3862632752472,10,Lower Secondary (Grades 7-9),85.05361650422394
+LAO,male,numeracy,FALSE,1,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,435,435,15.9009706808904,435,Primary (Grades 1-3),13.487420317728162
+LAO,male,numeracy,FALSE,2,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,433,433,23.159724338,433,Primary (Grades 1-3),25.11934111051231
+LAO,male,numeracy,FALSE,3,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,408,408,32.0203450410798,408,Primary (Grades 1-3),36.905944474199416
+LAO,male,numeracy,FALSE,4,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,468,468,48.8865099291243,468,Upper Primary (Grades 4-6),48.59542714344517
+LAO,male,numeracy,FALSE,5,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,332,332,65.4345897924149,332,Upper Primary (Grades 4-6),61.08536229049271
+LAO,male,numeracy,FALSE,6,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,329,329,67.0038892989315,329,Upper Primary (Grades 4-6),69.37407927917091
+LAO,male,numeracy,FALSE,7,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,253,253,76.75217515815311,253,Lower Secondary (Grades 7-9),78.35891026247634
+LAO,male,numeracy,FALSE,8,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,166,166,83.00893460979209,166,Lower Secondary (Grades 7-9),87.44205471431037
+LAO,male,numeracy,FALSE,9,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,16,16,100,16,Lower Secondary (Grades 7-9),96.81831694927432
+LAO,male,reading,FALSE,1,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,435,435,12.304656115769,435,Primary (Grades 1-3),10.20812190148548
+LAO,male,reading,FALSE,2,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,433,433,18.2554788429231,433,Primary (Grades 1-3),20.27310006621778
+LAO,male,reading,FALSE,3,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,408,408,28.539766332921303,408,Primary (Grades 1-3),31.20695378625844
+LAO,male,reading,FALSE,4,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,468,468,40.1608422138395,468,Upper Primary (Grades 4-6),42.76942596016896
+LAO,male,reading,FALSE,5,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,332,332,60.0084132332926,332,Upper Primary (Grades 4-6),55.65657895453096
+LAO,male,reading,FALSE,6,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,329,329,65.34065985613991,329,Upper Primary (Grades 4-6),65.72471931986212
+LAO,male,reading,FALSE,7,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,253,253,72.83153745433411,253,Lower Secondary (Grades 7-9),75.22665603613754
+LAO,male,reading,FALSE,8,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,166,166,82.81237441903279,166,Lower Secondary (Grades 7-9),83.79474593071261
+LAO,male,reading,FALSE,9,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,16,16,92.7860452216766,16,Lower Secondary (Grades 7-9),91.57030565183081
+LAO,middle,numeracy,FALSE,1,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,170,170,11.0015442215708,170,Primary (Grades 1-3),11.908349696433783
+LAO,middle,numeracy,FALSE,2,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,153,153,31.028819151092403,153,Primary (Grades 1-3),29.713724875343313
+LAO,middle,numeracy,FALSE,3,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,166,166,45.872562072624,166,Primary (Grades 1-3),44.07480732067519
+LAO,middle,numeracy,FALSE,4,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,192,192,50.558490514620004,192,Upper Primary (Grades 4-6),54.932185981942084
+LAO,middle,numeracy,FALSE,5,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,150,150,66.16949777075,150,Upper Primary (Grades 4-6),61.92140484587385
+LAO,middle,numeracy,FALSE,6,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,148,148,67.377544956806,148,Upper Primary (Grades 4-6),64.89605312169667
+LAO,middle,numeracy,FALSE,7,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,102,102,63.2471253070602,102,Lower Secondary (Grades 7-9),72.18570443535222
+LAO,middle,numeracy,FALSE,8,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,77,77,76.7824660879366,77,Lower Secondary (Grades 7-9),82.00777140496511
+LAO,middle,numeracy,FALSE,9,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,6,6,100,6,Lower Secondary (Grades 7-9),94.7835014451211
+LAO,middle,reading,FALSE,1,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,170,170,12.2663235942534,170,Primary (Grades 1-3),9.693488672665517
+LAO,middle,reading,FALSE,2,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,153,153,22.9052539768233,153,Primary (Grades 1-3),23.419192447456545
+LAO,middle,reading,FALSE,3,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,166,166,29.268028224437398,166,Primary (Grades 1-3),36.7103332135141
+LAO,middle,reading,FALSE,4,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,192,192,45.498284309161505,192,Upper Primary (Grades 4-6),49.03907744758756
+LAO,middle,reading,FALSE,5,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,150,150,71.1368766941126,150,Upper Primary (Grades 4-6),61.74610569435326
+LAO,middle,reading,FALSE,6,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,148,148,66.1895747404964,148,Upper Primary (Grades 4-6),68.35750440140322
+LAO,middle,reading,FALSE,7,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,102,102,66.7435818815406,102,Lower Secondary (Grades 7-9),73.33875223973673
+LAO,middle,reading,FALSE,8,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,77,77,76.4773387945872,77,Lower Secondary (Grades 7-9),75.74005379420147
+LAO,middle,reading,FALSE,9,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,6,6,77.4755041400927,6,Lower Secondary (Grades 7-9),75.99607251211721
+LAO,poorest,numeracy,FALSE,1,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,202,202,0.659119996259269,202,Primary (Grades 1-3),-1.5408145476727113
+LAO,poorest,numeracy,FALSE,2,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,196,196,6.29375111418259,196,Primary (Grades 1-3),8.266281239176825
+LAO,poorest,numeracy,FALSE,3,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,196,196,17.2212454448668,196,Primary (Grades 1-3),19.66962227527504
+LAO,poorest,numeracy,FALSE,4,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,173,173,28.481856303743502,173,Upper Primary (Grades 4-6),32.35137735181061
+LAO,poorest,numeracy,FALSE,5,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,98,98,45.7978136919045,98,Upper Primary (Grades 4-6),47.22603825598401
+LAO,poorest,numeracy,FALSE,6,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,82,82,67.9541832279986,82,Upper Primary (Grades 4-6),56.762310669507265
+LAO,poorest,numeracy,FALSE,7,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,53,53,59.975469944211,53,Lower Secondary (Grades 7-9),68.32214343559312
+LAO,poorest,numeracy,FALSE,8,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,32,32,72.1818680932964,32,Lower Secondary (Grades 7-9),80.62613052414093
+LAO,poorest,numeracy,FALSE,9,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,1,1,100,1,Lower Secondary (Grades 7-9),93.77505812607679
+LAO,poorest,reading,FALSE,1,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,202,202,0.883940179459896,202,Primary (Grades 1-3),0.06087860603169759
+LAO,poorest,reading,FALSE,2,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,196,196,5.16540620318737,196,Primary (Grades 1-3),6.64330267166288
+LAO,poorest,reading,FALSE,3,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,196,196,19.1872252438362,196,Primary (Grades 1-3),15.82599673291287
+LAO,poorest,reading,FALSE,4,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,173,173,17.0723433210493,173,Upper Primary (Grades 4-6),27.40875612393456
+LAO,poorest,reading,FALSE,5,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,98,98,45.0038213930485,98,Upper Primary (Grades 4-6),41.54624064851991
+LAO,poorest,reading,FALSE,6,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,82,82,61.892597078603195,82,Upper Primary (Grades 4-6),54.85974094719204
+LAO,poorest,reading,FALSE,7,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,53,53,64.0826059770462,53,Lower Secondary (Grades 7-9),68.87149865293665
+LAO,poorest,reading,FALSE,8,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,32,32,80.0789150748244,32,Lower Secondary (Grades 7-9),83.1182210067506
+LAO,poorest,reading,FALSE,9,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,1,1,100,1,Lower Secondary (Grades 7-9),97.58844257083666
+LAO,richest,numeracy,FALSE,1,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,152,152,36.8281212967765,152,Primary (Grades 1-3),33.002903274284506
+LAO,richest,numeracy,FALSE,2,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,141,141,37.3416715176436,141,Primary (Grades 1-3),44.74297031297903
+LAO,richest,numeracy,FALSE,3,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,142,142,58.4495117490106,142,Primary (Grades 1-3),56.06581122782421
+LAO,richest,numeracy,FALSE,4,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,147,147,65.0022743918271,147,Upper Primary (Grades 4-6),67.00860528604764
+LAO,richest,numeracy,FALSE,5,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,125,125,77.8398314419871,125,Upper Primary (Grades 4-6),77.8190503746323
+LAO,richest,numeracy,FALSE,6,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,120,120,86.1745904099064,120,Upper Primary (Grades 4-6),83.8122713753379
+LAO,richest,numeracy,FALSE,7,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,131,131,88.62305554171,131,Lower Secondary (Grades 7-9),89.12852262131703
+LAO,richest,numeracy,FALSE,8,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,91,91,87.2097130206378,91,Lower Secondary (Grades 7-9),93.37286208806452
+LAO,richest,numeracy,FALSE,9,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,20,20,100,20,Lower Secondary (Grades 7-9),96.49958033534563
+LAO,richest,reading,FALSE,1,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,152,152,29.3453498819908,152,Primary (Grades 1-3),26.50414981628561
+LAO,richest,reading,FALSE,2,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,141,141,32.5628712491603,141,Primary (Grades 1-3),40.30218339302287
+LAO,richest,reading,FALSE,3,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,142,142,59.0262712116532,142,Primary (Grades 1-3),52.46889892816253
+LAO,richest,reading,FALSE,4,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,147,147,61.7067767199622,147,Upper Primary (Grades 4-6),63.283751182894136
+LAO,richest,reading,FALSE,5,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,125,125,71.5651922504601,125,Upper Primary (Grades 4-6),72.13383145807362
+LAO,richest,reading,FALSE,6,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,120,120,79.6463057327158,120,Upper Primary (Grades 4-6),79.06277533333638
+LAO,richest,reading,FALSE,7,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,131,131,83.4891831640264,131,Lower Secondary (Grades 7-9),84.87584611208288
+LAO,richest,reading,FALSE,8,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,91,91,91.17722412253521,91,Lower Secondary (Grades 7-9),89.32171968567894
+LAO,richest,reading,FALSE,9,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,20,20,91.6760296360622,20,Lower Secondary (Grades 7-9),92.43174401557498
+LAO,second,numeracy,FALSE,1,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,209,209,9.247185049866879,209,Primary (Grades 1-3),7.1957447728855195
+LAO,second,numeracy,FALSE,2,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,189,189,18.2348139871554,189,Primary (Grades 1-3),18.165238678380724
+LAO,second,numeracy,FALSE,3,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,183,183,20.3280178668036,183,Primary (Grades 1-3),29.412583376584067
+LAO,second,numeracy,FALSE,4,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,202,202,45.297538637462,202,Upper Primary (Grades 4-6),40.597125533937856
+LAO,second,numeracy,FALSE,5,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,141,141,53.1198429751358,141,Upper Primary (Grades 4-6),53.06466953995204
+LAO,second,numeracy,FALSE,6,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,155,155,61.2730444749417,155,Upper Primary (Grades 4-6),61.5576454843819
+LAO,second,numeracy,FALSE,7,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,102,102,66.028382898738,102,Lower Secondary (Grades 7-9),67.54252092018388
+LAO,second,numeracy,FALSE,8,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,66,66,71.52218921832801,66,Lower Secondary (Grades 7-9),70.89706469582994
+LAO,second,numeracy,FALSE,9,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,3,3,71.83615808174581,3,Lower Secondary (Grades 7-9),71.74242758971424
+LAO,second,reading,FALSE,1,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,209,209,9.233984261806299,209,Primary (Grades 1-3),6.178220414462322
+LAO,second,reading,FALSE,2,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,189,189,14.1170859190202,189,Primary (Grades 1-3),16.132964295638775
+LAO,second,reading,FALSE,3,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,183,183,19.9188395775357,183,Primary (Grades 1-3),27.229093255851463
+LAO,second,reading,FALSE,4,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,202,202,40.544944272710296,202,Upper Primary (Grades 4-6),39.10593952011378
+LAO,second,reading,FALSE,5,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,141,141,53.7771955177887,141,Upper Primary (Grades 4-6),53.22557519461224
+LAO,second,reading,FALSE,6,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,155,155,63.6813974658077,155,Upper Primary (Grades 4-6),62.37162461174808
+LAO,second,reading,FALSE,7,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,102,102,68.59720295849479,102,Lower Secondary (Grades 7-9),68.18726421175256
+LAO,second,reading,FALSE,8,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,66,66,67.3296598693497,66,Lower Secondary (Grades 7-9),70.7660743025217
+LAO,second,reading,FALSE,9,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,3,3,71.83615808174581,3,Lower Secondary (Grades 7-9),70.06369396102303
+LAO,urban,numeracy,FALSE,1,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,263,263,30.5287017108199,263,Primary (Grades 1-3),26.819639755443788
+LAO,urban,numeracy,FALSE,2,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,272,272,32.2273790789872,272,Primary (Grades 1-3),39.04588995306107
+LAO,urban,numeracy,FALSE,3,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,252,252,51.11189805798671,252,Primary (Grades 1-3),50.49863634447026
+LAO,urban,numeracy,FALSE,4,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,273,273,62.2923319733682,273,Upper Primary (Grades 4-6),61.22661757198088
+LAO,urban,numeracy,FALSE,5,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,239,239,71.0010772242407,239,Upper Primary (Grades 4-6),71.50856428220402
+LAO,urban,numeracy,FALSE,6,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,253,253,78.19908933537491,253,Upper Primary (Grades 4-6),77.06941259564397
+LAO,urban,numeracy,FALSE,7,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,234,234,81.648514456393,234,Lower Secondary (Grades 7-9),83.41782172882114
+LAO,urban,numeracy,FALSE,8,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,148,148,84.4978361141412,148,Lower Secondary (Grades 7-9),89.86616660987809
+LAO,urban,numeracy,FALSE,9,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,21,21,100,21,Lower Secondary (Grades 7-9),96.4955652155985
+LAO,urban,reading,FALSE,1,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,263,263,22.6675532273729,263,Primary (Grades 1-3),20.4949160003653
+LAO,urban,reading,FALSE,2,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,272,272,28.2580797248995,272,Primary (Grades 1-3),33.31625619411068
+LAO,urban,reading,FALSE,3,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,252,252,48.737322171726696,252,Primary (Grades 1-3),45.23744657723955
+LAO,urban,reading,FALSE,4,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,273,273,53.937795032955606,273,Upper Primary (Grades 4-6),56.361108558675525
+LAO,urban,reading,FALSE,5,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,239,239,67.915326828018,239,Upper Primary (Grades 4-6),66.55177576761028
+LAO,urban,reading,FALSE,6,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,253,253,73.6118980713536,253,Upper Primary (Grades 4-6),73.80959111233014
+LAO,urban,reading,FALSE,7,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,234,234,82.2879378821519,234,Lower Secondary (Grades 7-9),81.43504690649686
+LAO,urban,reading,FALSE,8,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,148,148,83.39712158510079,148,Lower Secondary (Grades 7-9),89.14516675238322
+LAO,urban,reading,FALSE,9,Lower middle income,LMC,UNICEF_EAP,East Asia and Pacific,21,21,100,21,Lower Secondary (Grades 7-9),96.90405507983307
 LSO,All,numeracy,TRUE,1,Lower middle income,LMC,UNICEF_ESA,Eastern and Southern Africa,133,133,0,133,Primary (Grades 1-3),0.07942058538967167
 LSO,All,numeracy,TRUE,2,Lower middle income,LMC,UNICEF_ESA,Eastern and Southern Africa,351,351,0.054598860474077596,351,Primary (Grades 1-3),-0.09765344833103654
 LSO,All,numeracy,TRUE,3,Lower middle income,LMC,UNICEF_ESA,Eastern and Southern Africa,417,417,1.98064086568128,417,Primary (Grades 1-3),1.7302516544515023
@@ -3841,138 +3931,122 @@ NPL,urban,reading,FALSE,6,Lower middle income,LMC,UNICEF_SA,South Asia,278,278,5
 NPL,urban,reading,FALSE,7,Lower middle income,LMC,UNICEF_SA,South Asia,243,243,66.7012802650541,243,Lower Secondary (Grades 7-9),61.76138704075435
 NPL,urban,reading,FALSE,8,Lower middle income,LMC,UNICEF_SA,South Asia,244,244,70.5993880630932,244,Lower Secondary (Grades 7-9),69.73326604432484
 NPL,urban,reading,FALSE,9,Lower middle income,LMC,UNICEF_SA,South Asia,148,148,74.3905035452793,148,Lower Secondary (Grades 7-9),76.29738981600502
-NRU,All,numeracy,FALSE,1,High income,HIC,UNICEF_EAP,East Asia and Pacific,25,25,7.93650793650794,25,Primary (Grades 1-3),9.433044186173696
-NRU,All,numeracy,FALSE,2,High income,HIC,UNICEF_EAP,East Asia and Pacific,19,19,33.3333333333333,19,Primary (Grades 1-3),36.19405366692433
-NRU,All,numeracy,FALSE,3,High income,HIC,UNICEF_EAP,East Asia and Pacific,18,18,62.5,18,Primary (Grades 1-3),52.6962592862554
-NRU,All,numeracy,FALSE,4,High income,HIC,UNICEF_EAP,East Asia and Pacific,19,19,63.7931034482759,19,Upper Primary (Grades 4-6),59.65214014448196
-NRU,All,numeracy,FALSE,5,High income,HIC,UNICEF_EAP,East Asia and Pacific,22,22,63.076923076923094,22,Upper Primary (Grades 4-6),54.3714587908255
-NRU,All,numeracy,FALSE,6,High income,HIC,UNICEF_EAP,East Asia and Pacific,18,18,34.1463414634146,18,Upper Primary (Grades 4-6),47.816097406111645
-NRU,All,numeracy,FALSE,7,High income,HIC,UNICEF_EAP,East Asia and Pacific,16,16,41.304347826087,16,Lower Secondary (Grades 7-9),54.26893957116348
-NRU,All,numeracy,FALSE,8,High income,HIC,UNICEF_EAP,East Asia and Pacific,13,13,73.5294117647059,13,Lower Secondary (Grades 7-9),70.33147402969014
-NRU,All,numeracy,FALSE,9,High income,HIC,UNICEF_EAP,East Asia and Pacific,1,1,100,1,Lower Secondary (Grades 7-9),97.20790844207731
-NRU,All,reading,FALSE,1,High income,HIC,UNICEF_EAP,East Asia and Pacific,25,25,15.8730158730159,25,Primary (Grades 1-3),18.52822191157932
-NRU,All,reading,FALSE,2,High income,HIC,UNICEF_EAP,East Asia and Pacific,19,19,40,19,Primary (Grades 1-3),27.430505007178468
-NRU,All,reading,FALSE,3,High income,HIC,UNICEF_EAP,East Asia and Pacific,18,18,20.8333333333333,18,Primary (Grades 1-3),35.61615883842353
-NRU,All,reading,FALSE,4,High income,HIC,UNICEF_EAP,East Asia and Pacific,19,19,32.758620689655196,19,Upper Primary (Grades 4-6),42.014699576978884
-NRU,All,reading,FALSE,5,High income,HIC,UNICEF_EAP,East Asia and Pacific,22,22,72.30769230769229,22,Upper Primary (Grades 4-6),48.240565615190995
-NRU,All,reading,FALSE,6,High income,HIC,UNICEF_EAP,East Asia and Pacific,18,18,41.463414634146304,18,Upper Primary (Grades 4-6),49.36263967784012
-NRU,All,reading,FALSE,7,High income,HIC,UNICEF_EAP,East Asia and Pacific,16,16,41.304347826087,16,Lower Secondary (Grades 7-9),58.591493105882996
-NRU,All,reading,FALSE,8,High income,HIC,UNICEF_EAP,East Asia and Pacific,13,13,70.5882352941177,13,Lower Secondary (Grades 7-9),72.88010956054612
-NRU,All,reading,FALSE,9,High income,HIC,UNICEF_EAP,East Asia and Pacific,1,1,100,1,Lower Secondary (Grades 7-9),93.47162578243636
-NRU,female,numeracy,FALSE,1,High income,HIC,UNICEF_EAP,East Asia and Pacific,8,8,0,8,Primary (Grades 1-3),0.23262642632615993
-NRU,female,numeracy,FALSE,2,High income,HIC,UNICEF_EAP,East Asia and Pacific,12,12,32,12,Primary (Grades 1-3),38.81773852938444
-NRU,female,numeracy,FALSE,3,High income,HIC,UNICEF_EAP,East Asia and Pacific,9,9,81.8181818181818,9,Primary (Grades 1-3),61.257407801098644
-NRU,female,numeracy,FALSE,4,High income,HIC,UNICEF_EAP,East Asia and Pacific,11,11,58.1395348837209,11,Upper Primary (Grades 4-6),68.58767279484377
-NRU,female,numeracy,FALSE,5,High income,HIC,UNICEF_EAP,East Asia and Pacific,14,14,62.2222222222222,14,Upper Primary (Grades 4-6),55.07297607610575
-NRU,female,numeracy,FALSE,6,High income,HIC,UNICEF_EAP,East Asia and Pacific,8,8,41.1764705882353,8,Upper Primary (Grades 4-6),50.15500362917539
-NRU,female,numeracy,FALSE,7,High income,HIC,UNICEF_EAP,East Asia and Pacific,9,9,40.7407407407407,9,Lower Secondary (Grades 7-9),56.18811779324872
-NRU,female,numeracy,FALSE,8,High income,HIC,UNICEF_EAP,East Asia and Pacific,6,6,82.3529411764706,6,Lower Secondary (Grades 7-9),72.65915723216999
-NRU,female,reading,FALSE,1,High income,HIC,UNICEF_EAP,East Asia and Pacific,8,8,5.55555555555556,8,Primary (Grades 1-3),10.91462837754109
-NRU,female,reading,FALSE,2,High income,HIC,UNICEF_EAP,East Asia and Pacific,12,12,44,12,Primary (Grades 1-3),29.73919239197881
-NRU,female,reading,FALSE,3,High income,HIC,UNICEF_EAP,East Asia and Pacific,9,9,36.363636363636395,9,Primary (Grades 1-3),43.79186604708421
-NRU,female,reading,FALSE,4,High income,HIC,UNICEF_EAP,East Asia and Pacific,11,11,37.2093023255814,11,Upper Primary (Grades 4-6),51.55167069557942
-NRU,female,reading,FALSE,5,High income,HIC,UNICEF_EAP,East Asia and Pacific,14,14,77.7777777777778,14,Upper Primary (Grades 4-6),51.59487785715061
-NRU,female,reading,FALSE,6,High income,HIC,UNICEF_EAP,East Asia and Pacific,8,8,41.1764705882353,8,Upper Primary (Grades 4-6),53.191241987611775
-NRU,female,reading,FALSE,7,High income,HIC,UNICEF_EAP,East Asia and Pacific,9,9,40.7407407407407,9,Lower Secondary (Grades 7-9),59.88826600920091
-NRU,female,reading,FALSE,8,High income,HIC,UNICEF_EAP,East Asia and Pacific,6,6,82.3529411764706,6,Lower Secondary (Grades 7-9),70.8451877044273
-NRU,fourth,numeracy,FALSE,1,High income,HIC,UNICEF_EAP,East Asia and Pacific,4,4,0,4,Primary (Grades 1-3),-5.913912737521846
-NRU,fourth,numeracy,FALSE,2,High income,HIC,UNICEF_EAP,East Asia and Pacific,3,3,16.6666666666667,3,Primary (Grades 1-3),16.65787216487107
-NRU,fourth,numeracy,FALSE,3,High income,HIC,UNICEF_EAP,East Asia and Pacific,2,2,0,2,Primary (Grades 1-3),37.368996994042746
-NRU,fourth,numeracy,FALSE,4,High income,HIC,UNICEF_EAP,East Asia and Pacific,3,3,100,3,Upper Primary (Grades 4-6),55.31983721532125
-NRU,fourth,numeracy,FALSE,5,High income,HIC,UNICEF_EAP,East Asia and Pacific,6,6,57.142857142857096,6,Upper Primary (Grades 4-6),75.11636520517254
-NRU,fourth,numeracy,FALSE,6,High income,HIC,UNICEF_EAP,East Asia and Pacific,3,3,57.142857142857096,3,Upper Primary (Grades 4-6),77.66994264231569
-NRU,fourth,numeracy,FALSE,7,High income,HIC,UNICEF_EAP,East Asia and Pacific,1,1,100,1,Lower Secondary (Grades 7-9),57.21924960858474
-NRU,fourth,numeracy,FALSE,8,High income,HIC,UNICEF_EAP,East Asia and Pacific,1,1,0,1,Lower Secondary (Grades 7-9),17.51550183841409
-NRU,fourth,reading,FALSE,1,High income,HIC,UNICEF_EAP,East Asia and Pacific,4,4,10,4,Primary (Grades 1-3),4.582112514480748
-NRU,fourth,reading,FALSE,2,High income,HIC,UNICEF_EAP,East Asia and Pacific,3,3,16.6666666666667,3,Primary (Grades 1-3),15.384531798313558
-NRU,fourth,reading,FALSE,3,High income,HIC,UNICEF_EAP,East Asia and Pacific,2,2,0,2,Primary (Grades 1-3),30.981790094194245
-NRU,fourth,reading,FALSE,4,High income,HIC,UNICEF_EAP,East Asia and Pacific,3,3,60,3,Upper Primary (Grades 4-6),49.632969019494595
-NRU,fourth,reading,FALSE,5,High income,HIC,UNICEF_EAP,East Asia and Pacific,6,6,95.2380952380952,6,Upper Primary (Grades 4-6),67.82817711865513
-NRU,fourth,reading,FALSE,6,High income,HIC,UNICEF_EAP,East Asia and Pacific,3,3,42.8571428571429,3,Upper Primary (Grades 4-6),80.82901064787272
-NRU,fourth,reading,FALSE,7,High income,HIC,UNICEF_EAP,East Asia and Pacific,1,1,100,1,Lower Secondary (Grades 7-9),90.34941062771442
-NRU,fourth,reading,FALSE,8,High income,HIC,UNICEF_EAP,East Asia and Pacific,1,1,100,1,Lower Secondary (Grades 7-9),98.33258382140845
-NRU,male,numeracy,FALSE,1,High income,HIC,UNICEF_EAP,East Asia and Pacific,17,17,11.1111111111111,17,Primary (Grades 1-3),11.585094799203446
-NRU,male,numeracy,FALSE,2,High income,HIC,UNICEF_EAP,East Asia and Pacific,7,7,40,7,Primary (Grades 1-3),38.128997325371785
-NRU,male,numeracy,FALSE,3,High income,HIC,UNICEF_EAP,East Asia and Pacific,9,9,46.1538461538462,9,Primary (Grades 1-3),54.653895407862656
-NRU,male,numeracy,FALSE,4,High income,HIC,UNICEF_EAP,East Asia and Pacific,8,8,80,8,Upper Primary (Grades 4-6),61.399936018913046
-NRU,male,numeracy,FALSE,5,High income,HIC,UNICEF_EAP,East Asia and Pacific,8,8,65,8,Upper Primary (Grades 4-6),57.79195858565846
-NRU,male,numeracy,FALSE,6,High income,HIC,UNICEF_EAP,East Asia and Pacific,10,10,29.166666666666703,10,Upper Primary (Grades 4-6),48.412518475575446
-NRU,male,numeracy,FALSE,7,High income,HIC,UNICEF_EAP,East Asia and Pacific,7,7,42.105263157894704,7,Lower Secondary (Grades 7-9),52.86299437997054
-NRU,male,numeracy,FALSE,8,High income,HIC,UNICEF_EAP,East Asia and Pacific,7,7,64.7058823529412,7,Lower Secondary (Grades 7-9),67.52418828222741
-NRU,male,numeracy,FALSE,9,High income,HIC,UNICEF_EAP,East Asia and Pacific,1,1,100,1,Lower Secondary (Grades 7-9),93.77754092105077
-NRU,male,reading,FALSE,1,High income,HIC,UNICEF_EAP,East Asia and Pacific,17,17,20,17,Primary (Grades 1-3),16.834953125278467
-NRU,male,reading,FALSE,2,High income,HIC,UNICEF_EAP,East Asia and Pacific,7,7,20,7,Primary (Grades 1-3),17.63986618007699
-NRU,male,reading,FALSE,3,High income,HIC,UNICEF_EAP,East Asia and Pacific,9,9,7.69230769230769,9,Primary (Grades 1-3),22.00476430306917
-NRU,male,reading,FALSE,4,High income,HIC,UNICEF_EAP,East Asia and Pacific,8,8,20,8,Upper Primary (Grades 4-6),28.8597870138031
-NRU,male,reading,FALSE,5,High income,HIC,UNICEF_EAP,East Asia and Pacific,8,8,60,8,Upper Primary (Grades 4-6),40.716444938474766
-NRU,male,reading,FALSE,6,High income,HIC,UNICEF_EAP,East Asia and Pacific,10,10,41.6666666666667,10,Upper Primary (Grades 4-6),44.41612410566475
-NRU,male,reading,FALSE,7,High income,HIC,UNICEF_EAP,East Asia and Pacific,7,7,42.105263157894704,7,Lower Secondary (Grades 7-9),55.007366261740145
-NRU,male,reading,FALSE,8,High income,HIC,UNICEF_EAP,East Asia and Pacific,7,7,58.823529411764696,7,Lower Secondary (Grades 7-9),69.91184722510172
-NRU,male,reading,FALSE,9,High income,HIC,UNICEF_EAP,East Asia and Pacific,1,1,100,1,Lower Secondary (Grades 7-9),89.97396363257414
-NRU,middle,numeracy,FALSE,1,High income,HIC,UNICEF_EAP,East Asia and Pacific,5,5,45.454545454545496,5,Primary (Grades 1-3),48.40217609957323
-NRU,middle,numeracy,FALSE,2,High income,HIC,UNICEF_EAP,East Asia and Pacific,5,5,58.823529411764696,5,Primary (Grades 1-3),63.872752993203335
-NRU,middle,numeracy,FALSE,3,High income,HIC,UNICEF_EAP,East Asia and Pacific,4,4,100,4,Primary (Grades 1-3),69.81682494343966
-NRU,middle,numeracy,FALSE,4,High income,HIC,UNICEF_EAP,East Asia and Pacific,7,7,57.142857142857096,7,Upper Primary (Grades 4-6),69.21597574705827
-NRU,middle,numeracy,FALSE,5,High income,HIC,UNICEF_EAP,East Asia and Pacific,2,2,57.142857142857096,2,Upper Primary (Grades 4-6),65.35283766030429
-NRU,middle,numeracy,FALSE,7,High income,HIC,UNICEF_EAP,East Asia and Pacific,2,2,100,2,Lower Secondary (Grades 7-9),74.75582419974788
-NRU,middle,numeracy,FALSE,8,High income,HIC,UNICEF_EAP,East Asia and Pacific,4,4,64.2857142857143,4,Lower Secondary (Grades 7-9),77.44407057105113
-NRU,middle,reading,FALSE,1,High income,HIC,UNICEF_EAP,East Asia and Pacific,5,5,36.363636363636395,5,Primary (Grades 1-3),46.0095143692579
-NRU,middle,reading,FALSE,2,High income,HIC,UNICEF_EAP,East Asia and Pacific,5,5,58.823529411764696,5,Primary (Grades 1-3),37.27795585218111
-NRU,middle,reading,FALSE,3,High income,HIC,UNICEF_EAP,East Asia and Pacific,4,4,25,4,Primary (Grades 1-3),32.9106230523564
-NRU,middle,reading,FALSE,4,High income,HIC,UNICEF_EAP,East Asia and Pacific,7,7,32.1428571428571,7,Upper Primary (Grades 4-6),32.34051390268356
-NRU,middle,reading,FALSE,5,High income,HIC,UNICEF_EAP,East Asia and Pacific,2,2,42.8571428571429,2,Upper Primary (Grades 4-6),45.32338734702732
-NRU,middle,reading,FALSE,7,High income,HIC,UNICEF_EAP,East Asia and Pacific,2,2,100,2,Lower Secondary (Grades 7-9),69.07320075206569
-NRU,middle,reading,FALSE,8,High income,HIC,UNICEF_EAP,East Asia and Pacific,4,4,50,4,Lower Secondary (Grades 7-9),66.50125411731368
-NRU,poorest,numeracy,FALSE,1,High income,HIC,UNICEF_EAP,East Asia and Pacific,4,4,0,4,Primary (Grades 1-3),-14.226117723056895
-NRU,poorest,numeracy,FALSE,2,High income,HIC,UNICEF_EAP,East Asia and Pacific,2,2,0,2,Primary (Grades 1-3),18.798693375862253
-NRU,poorest,numeracy,FALSE,3,High income,HIC,UNICEF_EAP,East Asia and Pacific,2,2,16.6666666666667,2,Primary (Grades 1-3),44.51929274674124
-NRU,poorest,numeracy,FALSE,4,High income,HIC,UNICEF_EAP,East Asia and Pacific,3,3,100,3,Upper Primary (Grades 4-6),63.123734763442535
-NRU,poorest,numeracy,FALSE,5,High income,HIC,UNICEF_EAP,East Asia and Pacific,5,5,61.5384615384615,5,Upper Primary (Grades 4-6),63.31552946151186
-NRU,poorest,numeracy,FALSE,6,High income,HIC,UNICEF_EAP,East Asia and Pacific,6,6,31.25,6,Upper Primary (Grades 4-6),55.6065372083131
-NRU,poorest,numeracy,FALSE,7,High income,HIC,UNICEF_EAP,East Asia and Pacific,6,6,35.2941176470588,6,Lower Secondary (Grades 7-9),51.77586430448753
-NRU,poorest,numeracy,FALSE,8,High income,HIC,UNICEF_EAP,East Asia and Pacific,4,4,66.6666666666667,4,Lower Secondary (Grades 7-9),52.77797927998122
-NRU,poorest,reading,FALSE,1,High income,HIC,UNICEF_EAP,East Asia and Pacific,4,4,0,4,Primary (Grades 1-3),-5.141961059900061
-NRU,poorest,reading,FALSE,2,High income,HIC,UNICEF_EAP,East Asia and Pacific,2,2,0,2,Primary (Grades 1-3),7.3511692176509555
-NRU,poorest,reading,FALSE,3,High income,HIC,UNICEF_EAP,East Asia and Pacific,2,2,16.6666666666667,2,Primary (Grades 1-3),20.257172291408455
-NRU,poorest,reading,FALSE,4,High income,HIC,UNICEF_EAP,East Asia and Pacific,3,3,22.2222222222222,3,Upper Primary (Grades 4-6),33.31552612166749
-NRU,poorest,reading,FALSE,5,High income,HIC,UNICEF_EAP,East Asia and Pacific,5,5,61.5384615384615,5,Upper Primary (Grades 4-6),38.674709686048985
-NRU,poorest,reading,FALSE,6,High income,HIC,UNICEF_EAP,East Asia and Pacific,6,6,31.25,6,Upper Primary (Grades 4-6),39.39776035021374
-NRU,poorest,reading,FALSE,7,High income,HIC,UNICEF_EAP,East Asia and Pacific,6,6,17.6470588235294,6,Lower Secondary (Grades 7-9),44.23903579003953
-NRU,poorest,reading,FALSE,8,High income,HIC,UNICEF_EAP,East Asia and Pacific,4,4,66.6666666666667,4,Lower Secondary (Grades 7-9),51.894424680571376
-NRU,richest,numeracy,FALSE,1,High income,HIC,UNICEF_EAP,East Asia and Pacific,4,4,0,4,Primary (Grades 1-3),-1.6039092741158711
-NRU,richest,numeracy,FALSE,2,High income,HIC,UNICEF_EAP,East Asia and Pacific,7,7,42.105263157894704,7,Primary (Grades 1-3),51.86205776735997
-NRU,richest,numeracy,FALSE,3,High income,HIC,UNICEF_EAP,East Asia and Pacific,4,4,100,4,Primary (Grades 1-3),83.85118859004447
-NRU,richest,numeracy,FALSE,4,High income,HIC,UNICEF_EAP,East Asia and Pacific,1,1,100,1,Upper Primary (Grades 4-6),95.74613986515192
-NRU,richest,numeracy,FALSE,5,High income,HIC,UNICEF_EAP,East Asia and Pacific,4,4,75,4,Upper Primary (Grades 4-6),80.84647800045386
-NRU,richest,numeracy,FALSE,6,High income,HIC,UNICEF_EAP,East Asia and Pacific,4,4,66.6666666666667,4,Upper Primary (Grades 4-6),72.40162842149797
-NRU,richest,numeracy,FALSE,7,High income,HIC,UNICEF_EAP,East Asia and Pacific,2,2,55.5555555555556,2,Lower Secondary (Grades 7-9),75.02777658326161
-NRU,richest,numeracy,FALSE,8,High income,HIC,UNICEF_EAP,East Asia and Pacific,3,3,100,3,Lower Secondary (Grades 7-9),88.29142330037395
-NRU,richest,reading,FALSE,1,High income,HIC,UNICEF_EAP,East Asia and Pacific,4,4,45.454545454545496,4,Primary (Grades 1-3),50.50267568989125
-NRU,richest,reading,FALSE,2,High income,HIC,UNICEF_EAP,East Asia and Pacific,7,7,47.3684210526316,7,Primary (Grades 1-3),51.90759735354036
-NRU,richest,reading,FALSE,3,High income,HIC,UNICEF_EAP,East Asia and Pacific,4,4,100,4,Primary (Grades 1-3),53.004859655120676
-NRU,richest,reading,FALSE,4,High income,HIC,UNICEF_EAP,East Asia and Pacific,1,1,0,1,Upper Primary (Grades 4-6),54.878228113649676
-NRU,richest,reading,FALSE,5,High income,HIC,UNICEF_EAP,East Asia and Pacific,4,4,87.5,4,Upper Primary (Grades 4-6),57.62129299940912
-NRU,richest,reading,FALSE,6,High income,HIC,UNICEF_EAP,East Asia and Pacific,4,4,66.6666666666667,4,Upper Primary (Grades 4-6),71.79857183975437
-NRU,richest,reading,FALSE,7,High income,HIC,UNICEF_EAP,East Asia and Pacific,2,2,100,2,Lower Secondary (Grades 7-9),88.2559064763533
-NRU,richest,reading,FALSE,8,High income,HIC,UNICEF_EAP,East Asia and Pacific,3,3,100,3,Lower Secondary (Grades 7-9),106.4858243955616
-NRU,second,numeracy,FALSE,1,High income,HIC,UNICEF_EAP,East Asia and Pacific,8,8,0,8,Primary (Grades 1-3),-5.5625315909255235
-NRU,second,numeracy,FALSE,2,High income,HIC,UNICEF_EAP,East Asia and Pacific,2,2,0,2,Primary (Grades 1-3),22.85794276278518
-NRU,second,numeracy,FALSE,3,High income,HIC,UNICEF_EAP,East Asia and Pacific,6,6,70,6,Primary (Grades 1-3),40.33751528340609
-NRU,second,numeracy,FALSE,4,High income,HIC,UNICEF_EAP,East Asia and Pacific,5,5,40,5,Upper Primary (Grades 4-6),48.23452286468362
-NRU,second,numeracy,FALSE,5,High income,HIC,UNICEF_EAP,East Asia and Pacific,5,5,68.75,5,Upper Primary (Grades 4-6),41.449664030948995
-NRU,second,numeracy,FALSE,6,High income,HIC,UNICEF_EAP,East Asia and Pacific,5,5,8.33333333333333,5,Upper Primary (Grades 4-6),37.14316824795897
-NRU,second,numeracy,FALSE,7,High income,HIC,UNICEF_EAP,East Asia and Pacific,5,5,25,5,Lower Secondary (Grades 7-9),48.787234974800384
-NRU,second,numeracy,FALSE,8,High income,HIC,UNICEF_EAP,East Asia and Pacific,1,1,100,1,Lower Secondary (Grades 7-9),71.61485177160594
-NRU,second,numeracy,FALSE,9,High income,HIC,UNICEF_EAP,East Asia and Pacific,1,1,100,1,Lower Secondary (Grades 7-9),107.7755917951454
-NRU,second,reading,FALSE,1,High income,HIC,UNICEF_EAP,East Asia and Pacific,8,8,0,8,Primary (Grades 1-3),9.981962627105135
-NRU,second,reading,FALSE,2,High income,HIC,UNICEF_EAP,East Asia and Pacific,2,2,50,2,Primary (Grades 1-3),19.788542609611785
-NRU,second,reading,FALSE,3,High income,HIC,UNICEF_EAP,East Asia and Pacific,6,6,0,6,Primary (Grades 1-3),28.048624056883945
-NRU,second,reading,FALSE,4,High income,HIC,UNICEF_EAP,East Asia and Pacific,5,5,33.3333333333333,5,Upper Primary (Grades 4-6),33.25498607538306
-NRU,second,reading,FALSE,5,High income,HIC,UNICEF_EAP,East Asia and Pacific,5,5,56.25,5,Upper Primary (Grades 4-6),37.32203438321811
-NRU,second,reading,FALSE,6,High income,HIC,UNICEF_EAP,East Asia and Pacific,5,5,41.6666666666667,5,Upper Primary (Grades 4-6),41.911681370010854
-NRU,second,reading,FALSE,7,High income,HIC,UNICEF_EAP,East Asia and Pacific,5,5,18.75,5,Lower Secondary (Grades 7-9),56.36293036512263
-NRU,second,reading,FALSE,8,High income,HIC,UNICEF_EAP,East Asia and Pacific,1,1,100,1,Lower Secondary (Grades 7-9),76.2310841615099
-NRU,second,reading,FALSE,9,High income,HIC,UNICEF_EAP,East Asia and Pacific,1,1,100,1,Lower Secondary (Grades 7-9),103.60426316116379
+NRU,All,numeracy,FALSE,1,High income,HIC,UNICEF_EAP,East Asia and Pacific,19,19,33.3333333333333,19,Primary (Grades 1-3),39.5413375996616
+NRU,All,numeracy,FALSE,2,High income,HIC,UNICEF_EAP,East Asia and Pacific,18,18,62.5,18,Primary (Grades 1-3),53.58057325411591
+NRU,All,numeracy,FALSE,3,High income,HIC,UNICEF_EAP,East Asia and Pacific,19,19,63.7931034482759,19,Primary (Grades 1-3),58.49130428827799
+NRU,All,numeracy,FALSE,4,High income,HIC,UNICEF_EAP,East Asia and Pacific,22,22,63.076923076923094,22,Upper Primary (Grades 4-6),54.3714587908255
+NRU,All,numeracy,FALSE,5,High income,HIC,UNICEF_EAP,East Asia and Pacific,18,18,34.1463414634146,18,Upper Primary (Grades 4-6),43.474357373115275
+NRU,All,numeracy,FALSE,6,High income,HIC,UNICEF_EAP,East Asia and Pacific,16,16,41.304347826087,16,Upper Primary (Grades 4-6),49.26630659193089
+NRU,All,numeracy,FALSE,7,High income,HIC,UNICEF_EAP,East Asia and Pacific,13,13,73.5294117647059,13,Lower Secondary (Grades 7-9),68.07994272984806
+NRU,All,numeracy,FALSE,8,High income,HIC,UNICEF_EAP,East Asia and Pacific,1,1,100,1,Lower Secondary (Grades 7-9),100.83164044190306
+NRU,All,reading,FALSE,1,High income,HIC,UNICEF_EAP,East Asia and Pacific,19,19,40,19,Primary (Grades 1-3),31.017473618728598
+NRU,All,reading,FALSE,2,High income,HIC,UNICEF_EAP,East Asia and Pacific,18,18,20.8333333333333,18,Primary (Grades 1-3),36.19621809271718
+NRU,All,reading,FALSE,3,High income,HIC,UNICEF_EAP,East Asia and Pacific,19,19,32.758620689655196,19,Primary (Grades 1-3),41.683002995150446
+NRU,All,reading,FALSE,4,High income,HIC,UNICEF_EAP,East Asia and Pacific,22,22,72.30769230769229,22,Upper Primary (Grades 4-6),48.240565615190995
+NRU,All,reading,FALSE,5,High income,HIC,UNICEF_EAP,East Asia and Pacific,18,18,41.463414634146304,18,Upper Primary (Grades 4-6),49.71238827114885
+NRU,All,reading,FALSE,6,High income,HIC,UNICEF_EAP,East Asia and Pacific,16,16,41.304347826087,16,Upper Primary (Grades 4-6),55.91881508503595
+NRU,All,reading,FALSE,7,High income,HIC,UNICEF_EAP,East Asia and Pacific,13,13,70.5882352941177,13,Lower Secondary (Grades 7-9),71.08782292952743
+NRU,All,reading,FALSE,8,High income,HIC,UNICEF_EAP,East Asia and Pacific,1,1,100,1,Lower Secondary (Grades 7-9),96.33250367917923
+NRU,female,numeracy,FALSE,1,High income,HIC,UNICEF_EAP,East Asia and Pacific,12,12,32,12,Primary (Grades 1-3),40.282874999108934
+NRU,female,numeracy,FALSE,2,High income,HIC,UNICEF_EAP,East Asia and Pacific,9,9,81.8181818181818,9,Primary (Grades 1-3),61.41762127801864
+NRU,female,numeracy,FALSE,3,High income,HIC,UNICEF_EAP,East Asia and Pacific,11,11,58.1395348837209,11,Primary (Grades 1-3),67.53984834085372
+NRU,female,numeracy,FALSE,4,High income,HIC,UNICEF_EAP,East Asia and Pacific,14,14,62.2222222222222,14,Upper Primary (Grades 4-6),54.593915564598994
+NRU,female,numeracy,FALSE,5,High income,HIC,UNICEF_EAP,East Asia and Pacific,8,8,41.1764705882353,8,Upper Primary (Grades 4-6),44.63964733538383
+NRU,female,numeracy,FALSE,6,High income,HIC,UNICEF_EAP,East Asia and Pacific,9,9,40.7407407407407,9,Upper Primary (Grades 4-6),52.76640019065538
+NRU,female,numeracy,FALSE,7,High income,HIC,UNICEF_EAP,East Asia and Pacific,6,6,82.3529411764706,6,Lower Secondary (Grades 7-9),76.39951621169185
+NRU,female,reading,FALSE,1,High income,HIC,UNICEF_EAP,East Asia and Pacific,12,12,44,12,Primary (Grades 1-3),38.70020454805393
+NRU,female,reading,FALSE,2,High income,HIC,UNICEF_EAP,East Asia and Pacific,9,9,36.363636363636395,9,Primary (Grades 1-3),44.261453196044585
+NRU,female,reading,FALSE,3,High income,HIC,UNICEF_EAP,East Asia and Pacific,11,11,37.2093023255814,11,Primary (Grades 1-3),50.63357590661781
+NRU,female,reading,FALSE,4,High income,HIC,UNICEF_EAP,East Asia and Pacific,14,14,77.7777777777778,14,Upper Primary (Grades 4-6),59.97101648245905
+NRU,female,reading,FALSE,5,High income,HIC,UNICEF_EAP,East Asia and Pacific,8,8,41.1764705882353,8,Upper Primary (Grades 4-6),52.440485294946036
+NRU,female,reading,FALSE,6,High income,HIC,UNICEF_EAP,East Asia and Pacific,9,9,40.7407407407407,9,Upper Primary (Grades 4-6),58.11119561670088
+NRU,female,reading,FALSE,7,High income,HIC,UNICEF_EAP,East Asia and Pacific,6,6,82.3529411764706,6,Lower Secondary (Grades 7-9),72.984672158279
+NRU,fourth,numeracy,FALSE,1,High income,HIC,UNICEF_EAP,East Asia and Pacific,3,3,16.6666666666667,3,Primary (Grades 1-3),5.198815035027668
+NRU,fourth,numeracy,FALSE,2,High income,HIC,UNICEF_EAP,East Asia and Pacific,2,2,0,2,Primary (Grades 1-3),36.67792757981856
+NRU,fourth,numeracy,FALSE,3,High income,HIC,UNICEF_EAP,East Asia and Pacific,3,3,100,3,Primary (Grades 1-3),57.52477042107658
+NRU,fourth,numeracy,FALSE,4,High income,HIC,UNICEF_EAP,East Asia and Pacific,6,6,57.142857142857096,6,Upper Primary (Grades 4-6),71.50675138095515
+NRU,fourth,numeracy,FALSE,5,High income,HIC,UNICEF_EAP,East Asia and Pacific,3,3,57.142857142857096,3,Upper Primary (Grades 4-6),77.93352004708359
+NRU,fourth,numeracy,FALSE,6,High income,HIC,UNICEF_EAP,East Asia and Pacific,1,1,100,1,Upper Primary (Grades 4-6),57.79469996994875
+NRU,fourth,numeracy,FALSE,7,High income,HIC,UNICEF_EAP,East Asia and Pacific,1,1,0,1,Lower Secondary (Grades 7-9),16.64261890605151
+NRU,fourth,reading,FALSE,1,High income,HIC,UNICEF_EAP,East Asia and Pacific,3,3,16.6666666666667,3,Primary (Grades 1-3),3.8330035383569694
+NRU,fourth,reading,FALSE,2,High income,HIC,UNICEF_EAP,East Asia and Pacific,2,2,0,2,Primary (Grades 1-3),30.19571613305506
+NRU,fourth,reading,FALSE,3,High income,HIC,UNICEF_EAP,East Asia and Pacific,3,3,60,3,Primary (Grades 1-3),52.56735855685986
+NRU,fourth,reading,FALSE,4,High income,HIC,UNICEF_EAP,East Asia and Pacific,6,6,95.2380952380952,6,Upper Primary (Grades 4-6),75.12864330475804
+NRU,fourth,reading,FALSE,5,High income,HIC,UNICEF_EAP,East Asia and Pacific,3,3,42.8571428571429,3,Upper Primary (Grades 4-6),79.38462446523417
+NRU,fourth,reading,FALSE,6,High income,HIC,UNICEF_EAP,East Asia and Pacific,1,1,100,1,Upper Primary (Grades 4-6),88.14947016565755
+NRU,fourth,reading,FALSE,7,High income,HIC,UNICEF_EAP,East Asia and Pacific,1,1,100,1,Lower Secondary (Grades 7-9),100.82384764214574
+NRU,male,numeracy,FALSE,1,High income,HIC,UNICEF_EAP,East Asia and Pacific,7,7,40,7,Primary (Grades 1-3),39.596120986612206
+NRU,male,numeracy,FALSE,2,High income,HIC,UNICEF_EAP,East Asia and Pacific,9,9,46.1538461538462,9,Primary (Grades 1-3),55.1474056220792
+NRU,male,numeracy,FALSE,3,High income,HIC,UNICEF_EAP,East Asia and Pacific,8,8,80,8,Primary (Grades 1-3),60.675262399214844
+NRU,male,numeracy,FALSE,4,High income,HIC,UNICEF_EAP,East Asia and Pacific,8,8,65,8,Upper Primary (Grades 4-6),57.79195858565846
+NRU,male,numeracy,FALSE,5,High income,HIC,UNICEF_EAP,East Asia and Pacific,10,10,29.166666666666703,10,Upper Primary (Grades 4-6),43.71020224872607
+NRU,male,numeracy,FALSE,6,High income,HIC,UNICEF_EAP,East Asia and Pacific,7,7,42.105263157894704,7,Upper Primary (Grades 4-6),46.31340684888343
+NRU,male,numeracy,FALSE,7,High income,HIC,UNICEF_EAP,East Asia and Pacific,7,7,64.7058823529412,7,Lower Secondary (Grades 7-9),64.4544018188024
+NRU,male,numeracy,FALSE,8,High income,HIC,UNICEF_EAP,East Asia and Pacific,1,1,100,1,Lower Secondary (Grades 7-9),98.66386423600876
+NRU,male,reading,FALSE,1,High income,HIC,UNICEF_EAP,East Asia and Pacific,7,7,20,7,Primary (Grades 1-3),11.781221405288285
+NRU,male,reading,FALSE,2,High income,HIC,UNICEF_EAP,East Asia and Pacific,9,9,7.69230769230769,9,Primary (Grades 1-3),20.7240731997164
+NRU,male,reading,FALSE,3,High income,HIC,UNICEF_EAP,East Asia and Pacific,8,8,20,8,Primary (Grades 1-3),30.206217420320364
+NRU,male,reading,FALSE,4,High income,HIC,UNICEF_EAP,East Asia and Pacific,8,8,60,8,Upper Primary (Grades 4-6),40.71644493847476
+NRU,male,reading,FALSE,5,High income,HIC,UNICEF_EAP,East Asia and Pacific,10,10,41.6666666666667,10,Upper Primary (Grades 4-6),45.67956807400909
+NRU,male,reading,FALSE,6,High income,HIC,UNICEF_EAP,East Asia and Pacific,7,7,42.105263157894704,7,Upper Primary (Grades 4-6),52.755145720859886
+NRU,male,reading,FALSE,7,High income,HIC,UNICEF_EAP,East Asia and Pacific,7,7,58.823529411764696,7,Lower Secondary (Grades 7-9),68.26390207303317
+NRU,male,reading,FALSE,8,High income,HIC,UNICEF_EAP,East Asia and Pacific,1,1,100,1,Lower Secondary (Grades 7-9),92.61153023123562
+NRU,middle,numeracy,FALSE,1,High income,HIC,UNICEF_EAP,East Asia and Pacific,5,5,58.823529411764696,5,Primary (Grades 1-3),71.37852666123739
+NRU,middle,numeracy,FALSE,2,High income,HIC,UNICEF_EAP,East Asia and Pacific,4,4,100,4,Primary (Grades 1-3),70.29332711704254
+NRU,middle,numeracy,FALSE,3,High income,HIC,UNICEF_EAP,East Asia and Pacific,7,7,57.142857142857096,7,Primary (Grades 1-3),66.5734816759536
+NRU,middle,numeracy,FALSE,4,High income,HIC,UNICEF_EAP,East Asia and Pacific,2,2,57.142857142857096,2,Upper Primary (Grades 4-6),53.371573683483476
+NRU,middle,numeracy,FALSE,6,High income,HIC,UNICEF_EAP,East Asia and Pacific,2,2,100,2,Upper Primary (Grades 4-6),78.39897359936855
+NRU,middle,numeracy,FALSE,7,High income,HIC,UNICEF_EAP,East Asia and Pacific,4,4,64.2857142857143,4,Lower Secondary (Grades 7-9),74.36288021724249
+NRU,middle,reading,FALSE,1,High income,HIC,UNICEF_EAP,East Asia and Pacific,5,5,58.823529411764696,5,Primary (Grades 1-3),55.11370025022161
+NRU,middle,reading,FALSE,2,High income,HIC,UNICEF_EAP,East Asia and Pacific,4,4,25,4,Primary (Grades 1-3),33.77182031786899
+NRU,middle,reading,FALSE,3,High income,HIC,UNICEF_EAP,East Asia and Pacific,7,7,32.1428571428571,7,Primary (Grades 1-3),29.378303335040982
+NRU,middle,reading,FALSE,4,High income,HIC,UNICEF_EAP,East Asia and Pacific,2,2,42.8571428571429,2,Upper Primary (Grades 4-6),43.95710053279353
+NRU,middle,reading,FALSE,6,High income,HIC,UNICEF_EAP,East Asia and Pacific,2,2,100,2,Upper Primary (Grades 4-6),77.12506342749197
+NRU,middle,reading,FALSE,7,High income,HIC,UNICEF_EAP,East Asia and Pacific,4,4,50,4,Lower Secondary (Grades 7-9),60.60483086166049
+NRU,poorest,numeracy,FALSE,1,High income,HIC,UNICEF_EAP,East Asia and Pacific,2,2,0,2,Primary (Grades 1-3),-7.962342105630661
+NRU,poorest,numeracy,FALSE,2,High income,HIC,UNICEF_EAP,East Asia and Pacific,2,2,16.6666666666667,2,Primary (Grades 1-3),42.900649126063826
+NRU,poorest,numeracy,FALSE,3,High income,HIC,UNICEF_EAP,East Asia and Pacific,3,3,100,3,Primary (Grades 1-3),67.98692650815781
+NRU,poorest,numeracy,FALSE,4,High income,HIC,UNICEF_EAP,East Asia and Pacific,5,5,61.5384615384615,5,Upper Primary (Grades 4-6),69.5674267856592
+NRU,poorest,numeracy,FALSE,5,High income,HIC,UNICEF_EAP,East Asia and Pacific,6,6,31.25,6,Upper Primary (Grades 4-6),46.49188471967042
+NRU,poorest,numeracy,FALSE,6,High income,HIC,UNICEF_EAP,East Asia and Pacific,6,6,35.2941176470588,6,Upper Primary (Grades 4-6),45.00647443758597
+NRU,poorest,numeracy,FALSE,7,High income,HIC,UNICEF_EAP,East Asia and Pacific,4,4,66.6666666666667,4,Lower Secondary (Grades 7-9),60.08535333262509
+NRU,poorest,reading,FALSE,1,High income,HIC,UNICEF_EAP,East Asia and Pacific,2,2,0,2,Primary (Grades 1-3),-3.021972857051848
+NRU,poorest,reading,FALSE,2,High income,HIC,UNICEF_EAP,East Asia and Pacific,2,2,16.6666666666667,2,Primary (Grades 1-3),19.561418783505836
+NRU,poorest,reading,FALSE,3,High income,HIC,UNICEF_EAP,East Asia and Pacific,3,3,22.2222222222222,3,Primary (Grades 1-3),35.762416420333864
+NRU,poorest,reading,FALSE,4,High income,HIC,UNICEF_EAP,East Asia and Pacific,5,5,61.5384615384615,5,Upper Primary (Grades 4-6),46.86972965627655
+NRU,poorest,reading,FALSE,5,High income,HIC,UNICEF_EAP,East Asia and Pacific,6,6,31.25,6,Upper Primary (Grades 4-6),37.319151278820954
+NRU,poorest,reading,FALSE,6,High income,HIC,UNICEF_EAP,East Asia and Pacific,6,6,17.6470588235294,6,Upper Primary (Grades 4-6),41.6805169436814
+NRU,poorest,reading,FALSE,7,High income,HIC,UNICEF_EAP,East Asia and Pacific,4,4,66.6666666666667,4,Lower Secondary (Grades 7-9),54.87635381499249
+NRU,richest,numeracy,FALSE,1,High income,HIC,UNICEF_EAP,East Asia and Pacific,7,7,42.105263157894704,7,Primary (Grades 1-3),50.22498393622885
+NRU,richest,numeracy,FALSE,2,High income,HIC,UNICEF_EAP,East Asia and Pacific,4,4,100,4,Primary (Grades 1-3),83.85310857425429
+NRU,richest,numeracy,FALSE,3,High income,HIC,UNICEF_EAP,East Asia and Pacific,1,1,100,1,Primary (Grades 1-3),95.02449636229376
+NRU,richest,numeracy,FALSE,4,High income,HIC,UNICEF_EAP,East Asia and Pacific,4,4,75,4,Upper Primary (Grades 4-6),79.726580582622
+NRU,richest,numeracy,FALSE,5,High income,HIC,UNICEF_EAP,East Asia and Pacific,4,4,66.6666666666667,4,Upper Primary (Grades 4-6),64.4684788892762
+NRU,richest,numeracy,FALSE,6,High income,HIC,UNICEF_EAP,East Asia and Pacific,2,2,55.5555555555556,2,Upper Primary (Grades 4-6),70.20404136792855
+NRU,richest,numeracy,FALSE,7,High income,HIC,UNICEF_EAP,East Asia and Pacific,3,3,100,3,Lower Secondary (Grades 7-9),93.47348806707092
+NRU,richest,reading,FALSE,1,High income,HIC,UNICEF_EAP,East Asia and Pacific,7,7,47.3684210526316,7,Primary (Grades 1-3),62.185284983822434
+NRU,richest,reading,FALSE,2,High income,HIC,UNICEF_EAP,East Asia and Pacific,4,4,100,4,Primary (Grades 1-3),53.66107394701634
+NRU,richest,reading,FALSE,3,High income,HIC,UNICEF_EAP,East Asia and Pacific,1,1,0,1,Primary (Grades 1-3),52.428420335278474
+NRU,richest,reading,FALSE,4,High income,HIC,UNICEF_EAP,East Asia and Pacific,4,4,87.5,4,Upper Primary (Grades 4-6),52.050645630335055
+NRU,richest,reading,FALSE,5,High income,HIC,UNICEF_EAP,East Asia and Pacific,4,4,66.6666666666667,4,Upper Primary (Grades 4-6),75.89657506793665
+NRU,richest,reading,FALSE,6,High income,HIC,UNICEF_EAP,East Asia and Pacific,2,2,100,2,Upper Primary (Grades 4-6),91.63297275442714
+NRU,richest,reading,FALSE,7,High income,HIC,UNICEF_EAP,East Asia and Pacific,3,3,100,3,Lower Secondary (Grades 7-9),102.96209352232975
+NRU,second,numeracy,FALSE,1,High income,HIC,UNICEF_EAP,East Asia and Pacific,2,2,0,2,Primary (Grades 1-3),15.651636142608563
+NRU,second,numeracy,FALSE,2,High income,HIC,UNICEF_EAP,East Asia and Pacific,6,6,70,6,Primary (Grades 1-3),39.36588392798069
+NRU,second,numeracy,FALSE,3,High income,HIC,UNICEF_EAP,East Asia and Pacific,5,5,40,5,Primary (Grades 1-3),48.33660946811037
+NRU,second,numeracy,FALSE,4,High income,HIC,UNICEF_EAP,East Asia and Pacific,5,5,68.75,5,Upper Primary (Grades 4-6),41.449664030948995
+NRU,second,numeracy,FALSE,5,High income,HIC,UNICEF_EAP,East Asia and Pacific,5,5,8.33333333333333,5,Upper Primary (Grades 4-6),29.71436143085273
+NRU,second,numeracy,FALSE,6,High income,HIC,UNICEF_EAP,East Asia and Pacific,5,5,25,5,Upper Primary (Grades 4-6),43.025316056678314
+NRU,second,numeracy,FALSE,7,High income,HIC,UNICEF_EAP,East Asia and Pacific,1,1,100,1,Lower Secondary (Grades 7-9),69.30098960067097
+NRU,second,numeracy,FALSE,8,High income,HIC,UNICEF_EAP,East Asia and Pacific,1,1,100,1,Lower Secondary (Grades 7-9),111.54443141080547
+NRU,second,reading,FALSE,1,High income,HIC,UNICEF_EAP,East Asia and Pacific,2,2,50,2,Primary (Grades 1-3),34.91217521816041
+NRU,second,reading,FALSE,2,High income,HIC,UNICEF_EAP,East Asia and Pacific,6,6,0,6,Primary (Grades 1-3),30.832526341405703
+NRU,second,reading,FALSE,3,High income,HIC,UNICEF_EAP,East Asia and Pacific,5,5,33.3333333333333,5,Primary (Grades 1-3),31.06836388188148
+NRU,second,reading,FALSE,4,High income,HIC,UNICEF_EAP,East Asia and Pacific,5,5,56.25,5,Upper Primary (Grades 4-6),37.32203438321811
+NRU,second,reading,FALSE,5,High income,HIC,UNICEF_EAP,East Asia and Pacific,5,5,41.6666666666667,5,Upper Primary (Grades 4-6),40.987225569536534
+NRU,second,reading,FALSE,6,High income,HIC,UNICEF_EAP,East Asia and Pacific,5,5,18.75,5,Upper Primary (Grades 4-6),53.898798330755305
+NRU,second,reading,FALSE,7,High income,HIC,UNICEF_EAP,East Asia and Pacific,1,1,100,1,Lower Secondary (Grades 7-9),74.62668001864117
+NRU,second,reading,FALSE,8,High income,HIC,UNICEF_EAP,East Asia and Pacific,1,1,100,1,Lower Secondary (Grades 7-9),106.13446863495695
 PAK,All,numeracy,FALSE,1,Lower middle income,LMC,UNICEF_SA,South Asia,1672,1672,2.13673922908101,1672,Primary (Grades 1-3),1.7495097383427818
 PAK,All,numeracy,FALSE,2,Lower middle income,LMC,UNICEF_SA,South Asia,2211,2210,5.55182396144965,2210,Primary (Grades 1-3),5.6769871125089235
 PAK,All,numeracy,FALSE,3,Lower middle income,LMC,UNICEF_SA,South Asia,2150,2149,8.88422468935047,2149,Primary (Grades 1-3),9.7241820562008
