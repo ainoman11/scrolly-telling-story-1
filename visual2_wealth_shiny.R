@@ -340,7 +340,7 @@ server <- function(input, output, session) {
           } else {
             median(proficiency_rate, na.rm = TRUE)
           },
-          n_countrys = n_distinct(iso3),
+          n_countries = n_distinct(iso3),
           total_children = sum(n, na.rm = TRUE),
           .groups = "drop"
         ) %>%
@@ -384,8 +384,8 @@ server <- function(input, output, session) {
           "<b>", facet_name, " - ", wealth, "</b><br>",
           "Grade: ", w_data$grade_band_ordered, "<br>",
           "Proficiency: ", round(w_data$proficiency_agg, 1), "%<br>",
-          "N countrys: ", w_data$n_countrys, "<br>",
-          "Total children: ", format(w_data$total_children, big.mark = ",")
+          "N countries: ", w_data$n_countries, "<br>",
+          "N: ", format(w_data$total_children, big.mark = ",")
         )
         
         # Determine if this trace should show in legend (only show once per wealth group)
@@ -443,7 +443,7 @@ server <- function(input, output, session) {
         title = list(
           text = paste0("<b>Wealth Gradients</b><br><sub>",
                        tools::toTitleCase(input$subject), " - ",
-                       agg_label, " across countrys</sub>"),
+                       agg_label, " across countries</sub>"),
           x = 0.5, xanchor = "center"
         ),
         # Africa facet
@@ -512,9 +512,9 @@ server <- function(input, output, session) {
     countries_missing_combos <- attr(df, "countries_missing_combinations")
     countries_dropped <- attr(df, "countries_dropped")
 
-    all_countrys <- length(unique(df$iso3))
-    africa_countrys <- length(unique(df$iso3[df$is_africa == TRUE]))
-    non_africa_countrys <- length(unique(df$iso3[df$is_africa == FALSE]))
+    all_countries <- length(unique(df$iso3))
+    africa_countries <- length(unique(df$iso3[df$is_africa == TRUE]))
+    non_africa_countries <- length(unique(df$iso3[df$is_africa == FALSE]))
 
     # Get year information
     year_info <- ""
@@ -539,9 +539,9 @@ server <- function(input, output, session) {
       "- Countries with missing combinations: ", countries_missing_combos, "\n",
       "- Countries dropped (tolerance filter): ", countries_dropped, "\n",
       "- Missing combinations tolerance: ", input$missing_combinations_tolerance, " (countries need ≥ ", min_required_combos, "/15 combinations)\n",
-      "- All countrys: ", all_countrys, "\n",
-      "- Africa countrys: ", africa_countrys, "\n",
-      "- Non-Africa countrys: ", non_africa_countrys, "\n",
+      "- All countries: ", all_countries, "\n",
+      "- Africa countries: ", africa_countries, "\n",
+      "- Non-Africa countries: ", non_africa_countries, "\n",
       "- Wealth groups: ", length(unique(df$category)), "\n",
       year_info
     )
@@ -555,7 +555,7 @@ server <- function(input, output, session) {
       "<p><strong>Visual 2: Wealth Gradients</strong></p>
       <ul>
         <li><strong>Purpose:</strong> Show inequality in foundational skills by household wealth</li>
-        <li><strong>Facets:</strong> Two panels showing Africa and Non-Africa countrys</li>
+        <li><strong>Facets:</strong> Two panels showing Africa and Non-Africa countries</li>
         <li><strong>Blue thick line:</strong> All children (aggregated) - <em>with bolded data labels showing percentages</em></li>
         <li><strong>Red to green gradient:</strong> Poorest → Richest quintiles</li>
       </ul>
@@ -563,7 +563,7 @@ server <- function(input, output, session) {
       <ul>
         <li>Only the latest year of data is used for each country (no year mixing)</li>
         <li>Countries dropped by tolerance filter are excluded from calculations</li>
-        <li>Aggregation method (mean/median) across countrys can be selected in filters</li>
+        <li>Aggregation method (mean/median) across countries can be selected in filters</li>
         <li>Mean (default) gives arithmetic average; each country contributes equally</li>
         <li>Median is more robust to outliers</li>
         <li>Larger gaps between lines indicate greater inequality</li>
@@ -593,7 +593,7 @@ server <- function(input, output, session) {
         <li>The table on the right shows how many combinations are missing for each affected country and the percentage of data loss</li>
         <li>The chart shows one line per wealth group, aggregated across countries within each facet</li>
       </ul>
-      <p><em>Lines show unweighted aggregates across education countrys. Each country contributes equally.</em></p>"
+      <p><em>Lines show unweighted aggregates across education countries. Each country contributes equally.</em></p>"
     )
   })
   
