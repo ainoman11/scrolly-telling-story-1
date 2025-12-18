@@ -108,6 +108,17 @@ ui <- fluidPage(
       
       h4("Filters"),
       
+      # Metric type: dropdown to select how proficiency is calculated
+      selectInput("metric_type",
+                  "Metric:",
+                  choices = c(
+                    "Median" = "median",
+                    "Median with LOESS" = "median_loess",
+                    "Mean" = "mean",
+                    "Mean with LOESS" = "mean_loess"
+                  ),
+                  selected = "median_loess"),
+      
       # Category: dropdown, default to "All"
       if ("category" %in% names(filter_columns)) {
         selectInput("filter_category",
@@ -244,7 +255,7 @@ create_hover_text <- function(row_data, y_value) {
     text_parts <- c(text_parts, paste0("Wealth Quintile: ", row_data$wealth_quintile))
   
   text_parts <- c(text_parts, paste0("Grade: ", row_data$grade_numeric))
-  text_parts <- c(text_parts, paste0("Proficiency LOESS: ", round(y_value, 2), "%"))
+  text_parts <- c(text_parts, paste0("Proficiency: ", round(y_value, 2), "%"))
   
   if ("n" %in% names(row_data)) 
     text_parts <- c(text_parts, paste0("N: ", row_data$n))
@@ -262,9 +273,41 @@ create_hover_text <- function(row_data, y_value) {
 
 server <- function(input, output, session) {
   
+  # Reactive settings for metric selection
+  metric_settings <- reactive({
+    type <- input$metric_type
+    if (is.null(type)) type <- "median_loess"
+    
+    switch(
+      type,
+      "median" = list(
+        col = "proficiency_rate",
+        agg = "median",
+        axis_title = "Proficiency (%)"
+      ),
+      "median_loess" = list(
+        col = "proficiency_loess_span1",
+        agg = "median",
+        axis_title = "Proficiency LOESS (%)"
+      ),
+      "mean" = list(
+        col = "proficiency_rate",
+        agg = "mean",
+        axis_title = "Proficiency (%)"
+      ),
+      "mean_loess" = list(
+        col = "proficiency_loess_span1",
+        agg = "mean",
+        axis_title = "Proficiency LOESS (%)"
+      )
+    )
+  })
+  
   # Reactive data based on filters
   filtered_data <- reactive({
     df <- data
+    metric <- metric_settings()
+    metric_col <- metric$col
     
     # Keep only the latest year for each country to avoid mixing years
     if ("year" %in% colnames(df)) {
@@ -304,11 +347,11 @@ server <- function(input, output, session) {
       df <- df %>% filter(is_africa == input$filter_africa)
     }
     
-    # Filter out rows with missing proficiency values
-    df <- df %>% filter(!is.na(proficiency_loess_span1))
-    
     # Remove rows with missing grade
     df <- df %>% filter(!is.na(grade_numeric))
+    
+    # Filter out rows with missing selected proficiency metric
+    df <- df[!is.na(df[[metric_col]]), ]
     
     # Track countries before minimum observations filter
     countries_before <- unique(df$iso3)
@@ -405,7 +448,7 @@ server <- function(input, output, session) {
     
     excluded_combinations <- rows_before_n_filter - rows_after_n_filter
     
-    # Calculate medians for benchmarks using data BEFORE category filter but AFTER other filters
+    # Calculate benchmarks summary using data BEFORE category filter but AFTER other filters
     # Start fresh from data and apply same filters as above (year, subject, income, region, africa, min_obs)
     df_median_base <- data
 
@@ -448,9 +491,16 @@ server <- function(input, output, session) {
     df_median_base <- df_median_base %>%
       filter(
         category == "All",
-        !is.na(proficiency_loess_span1),
         !is.na(grade_numeric)
-      ) %>%
+      )
+    
+    # Remove rows with missing selected metric
+    df_median_base <- df_median_base[!is.na(df_median_base[[metric_col]]), ]
+    
+    # Store selected metric in a common column for later summaries
+    df_median_base$metric_value <- df_median_base[[metric_col]]
+    
+    df_median_base <- df_median_base %>%
       mutate(
         region_group = ifelse(is_africa,
                              "MICS6 Africa countries",
@@ -480,12 +530,14 @@ server <- function(input, output, session) {
   output$line_chart <- renderPlotly({
 
     plot_data <- filtered_data()
+    metric <- metric_settings()
+    metric_col <- metric$col
 
     # Validate data
     req(nrow(plot_data) > 0)
 
-    # Calculate medians for regional benchmarks using ORIGINAL data with same filters
-    # but forcing category == "All" for median calculation
+    # Calculate benchmarks for regional lines using ORIGINAL data with same filters
+    # but forcing category == "All" for benchmark calculation
     df_median_base <- data
 
     # Apply same year filter
@@ -523,25 +575,37 @@ server <- function(input, output, session) {
       }
     }
 
-    # NOW filter for median calculation: category == "All" (all countries have region data)
+    # NOW filter for benchmark calculation: category == "All" (all countries have region data)
     df_median_base <- df_median_base %>%
       filter(
         category == "All",
         !is.na(Region),
-        !is.na(proficiency_loess_span1),
         !is.na(grade_numeric)
-      ) %>%
+      )
+    
+    # Remove rows with missing selected metric
+    df_median_base <- df_median_base[!is.na(df_median_base[[metric_col]]), ]
+    
+    # Store selected metric in a common column for benchmark calculation
+    df_median_base$metric_value <- df_median_base[[metric_col]]
+    
+    df_median_base <- df_median_base %>%
       mutate(
         region_group = ifelse(is_africa,
                              "MICS6 Africa countries",
                              "MICS6 Rest of the world countries")
       )
 
-    # Calculate medians by region and grade
+    # Calculate benchmark statistics (median or mean) by region and grade
+    use_mean <- identical(metric$agg, "mean")
     medians <- df_median_base %>%
       group_by(region_group, grade_numeric) %>%
       summarise(
-        median_prof = median(proficiency_loess_span1, na.rm = TRUE),
+        median_prof = if (use_mean) {
+          mean(metric_value, na.rm = TRUE)
+        } else {
+          median(metric_value, na.rm = TRUE)
+        },
         n_countries = n_distinct(iso3),
         .groups = "drop"
       ) %>%
@@ -560,8 +624,8 @@ server <- function(input, output, session) {
         filter(iso3 == country) %>%
         arrange(grade_numeric)
 
-      # Get Y values
-      y_values <- country_data$proficiency_loess_span1
+      # Get Y values based on selected metric
+      y_values <- country_data[[metric_col]]
 
       # Create hover text for each point
       hover_texts <- sapply(1:nrow(country_data), function(j) {
@@ -647,7 +711,7 @@ server <- function(input, output, session) {
     fig <- fig %>%
       layout(
         title = list(
-          text = "<b>Learning Gradient Analysis - LOESS Smoothed</b><br><sub>Proficiency by Grade</sub>",
+          text = "<b>Learning Gradient Analysis</b><br><sub>Proficiency by Grade</sub>",
           x = 0.5,
           xanchor = "center"
         ),
@@ -658,7 +722,7 @@ server <- function(input, output, session) {
           gridcolor = "#E5E5E5"
         ),
         yaxis = list(
-          title = "<b>Proficiency LOESS (%)</b>",
+          title = paste0("<b>", metric$axis_title, "</b>"),
           range = c(0, 100),
           gridcolor = "#E5E5E5"
         ),

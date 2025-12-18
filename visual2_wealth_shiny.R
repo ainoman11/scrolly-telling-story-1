@@ -10,7 +10,7 @@ library(readr)
 # DATA LOADING
 # ============================================================================
 
-data_file <- "data/learning_gradient_bands_raw.csv"
+data_file <- "data/learning_gradient_bands_with_loess.csv"
 data <- read_csv(data_file, show_col_types = FALSE)
 
 # Valid grade bands
@@ -63,11 +63,16 @@ ui <- fluidPage(
                   choices = filter_columns$subject,
                   selected = "reading"),
       
-      # Aggregation method
-      selectInput("agg_method",
-                  "Aggregation Method:",
-                  choices = c("Mean" = "mean", "Median" = "median"),
-                  selected = "mean"),
+      # Metric type (mean/median with or without LOESS smoothing)
+      selectInput("metric_type",
+                  "Metric:",
+                  choices = c(
+                    "Median" = "median",
+                    "Median with LOESS" = "median_loess",
+                    "Mean" = "mean",
+                    "Mean with LOESS" = "mean_loess"
+                  ),
+                  selected = "mean_loess"),
       
       hr(),
       
@@ -173,12 +178,53 @@ ui <- fluidPage(
 
 server <- function(input, output, session) {
   
+  # Reactive settings for metric selection (column + aggregation + labels)
+  metric_settings <- reactive({
+    type <- input$metric_type
+    if (is.null(type)) type <- "mean_loess"
+    
+    switch(
+      type,
+      "median" = list(
+        col = "proficiency_rate",
+        agg = "median",
+        label = "Median",
+        subtitle = "Median across countries",
+        axis_title = "% with foundational skills"
+      ),
+      "median_loess" = list(
+        col = "proficiency_loess_span1",
+        agg = "median",
+        label = "Median (LOESS)",
+        subtitle = "Median of LOESS-smoothed proficiency across countries",
+        axis_title = "% with foundational skills (LOESS)"
+      ),
+      "mean" = list(
+        col = "proficiency_rate",
+        agg = "mean",
+        label = "Mean",
+        subtitle = "Mean across countries",
+        axis_title = "% with foundational skills"
+      ),
+      "mean_loess" = list(
+        col = "proficiency_loess_span1",
+        agg = "mean",
+        label = "Mean (LOESS)",
+        subtitle = "Mean of LOESS-smoothed proficiency across countries",
+        axis_title = "% with foundational skills (LOESS)"
+      )
+    )
+  })
+  
   # Reactive filtered data
   filtered_data <- reactive({
+    metric <- metric_settings()
+    metric_col <- metric$col
+    
     df <- data %>%
       filter(grade_band %in% valid_grade_bands) %>%
       filter(subject == input$subject) %>%
-      filter(!is.na(proficiency_rate))
+      filter(!is.na(.data[[metric_col]]))
     
     # Keep only the latest year for each country to avoid mixing years
     if ("year" %in% colnames(df)) {
@@ -317,6 +363,10 @@ server <- function(input, output, session) {
   # Create visualization with facets
   output$main_chart <- renderPlotly({
     df <- filtered_data()
+    metric <- metric_settings()
+    metric_col <- metric$col
+    use_mean <- identical(metric$agg, "mean")
+    metric_sym <- rlang::sym(metric_col)
     req(nrow(df) > 0)
     
     # Create three datasets: All, Africa, Non-Africa
@@ -335,10 +385,10 @@ server <- function(input, output, session) {
       agg_df <- facet_df %>%
         group_by(category_ordered, grade_band_ordered) %>%
         summarise(
-          proficiency_agg = if(input$agg_method == "mean") {
-            mean(proficiency_rate, na.rm = TRUE)
+          proficiency_agg = if (use_mean) {
+            mean(!!metric_sym, na.rm = TRUE)
           } else {
-            median(proficiency_rate, na.rm = TRUE)
+            median(!!metric_sym, na.rm = TRUE)
           },
           n_countries = n_distinct(iso3),
           total_children = sum(n, na.rm = TRUE),
@@ -436,14 +486,14 @@ server <- function(input, output, session) {
     }
     
     # Layout with two subplots in one row
-    agg_label <- tools::toTitleCase(input$agg_method)
+    metric_label <- metric$label
     
     fig <- fig %>%
       layout(
         title = list(
           text = paste0("<b>Wealth Gradients</b><br><sub>",
                        tools::toTitleCase(input$subject), " - ",
-                       agg_label, " across countries</sub>"),
+                       metric_label, " across countries</sub>"),
           x = 0.5, xanchor = "center"
         ),
         # Africa facet
@@ -457,7 +507,7 @@ server <- function(input, output, session) {
           automargin = TRUE
         ),
         yaxis = list(
-          title = "<b>% with foundational skills</b>",
+          title = paste0("<b>", metric$axis_title, "</b>"),
           range = c(0, 100),
           gridcolor = "#E5E5E5"
         ),
@@ -563,8 +613,8 @@ server <- function(input, output, session) {
       <ul>
         <li>Only the latest year of data is used for each country (no year mixing)</li>
         <li>Countries dropped by tolerance filter are excluded from calculations</li>
-        <li>Aggregation method (mean/median) across countries can be selected in filters</li>
-        <li>Mean (default) gives arithmetic average; each country contributes equally</li>
+        <li>Metric (mean/median, with or without LOESS smoothing) across countries can be selected in filters</li>
+        <li>Mean gives the arithmetic average; each country contributes equally</li>
         <li>Median is more robust to outliers</li>
         <li>Larger gaps between lines indicate greater inequality</li>
         <li>Compare patterns across Africa/Non-Africa to see regional differences</li>
@@ -579,7 +629,7 @@ server <- function(input, output, session) {
       <p><strong>How to use filters:</strong></p>
       <ul>
         <li><strong>Subject:</strong> Switch between reading and numeracy</li>
-        <li><strong>Aggregation Method:</strong> Choose mean (default) or median</li>
+        <li><strong>Metric:</strong> Choose median / median with LOESS / mean / mean with LOESS (default: mean with LOESS)</li>
         <li><strong>Minimum Observations:</strong> Exclude individual combinations with small sample sizes (default: 50)</li>
         <li><strong>Missing Combinations Tolerance:</strong> Maximum missing combinations allowed per country out of 15 (1 = all 15 required, 15 = all countries included, default: 15)</li>
         <li><strong>Wealth Groups:</strong> Multi-select dropdown - select which wealth quintiles to display</li>
@@ -646,7 +696,7 @@ server <- function(input, output, session) {
   # Reset filters button
   observeEvent(input$reset_filters, {
     updateSelectInput(session, "subject", selected = "reading")
-    updateSelectInput(session, "agg_method", selected = "mean")
+    updateSelectInput(session, "metric_type", selected = "mean_loess")
     updateSliderInput(session, "min_observations", value = 50)
     updateSliderInput(session, "missing_combinations_tolerance", value = 15)
 
