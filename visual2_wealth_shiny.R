@@ -7,6 +7,7 @@ library(dplyr)
 library(readr)
 library(rlang)
 library(htmlwidgets)
+library(shinyWidgets)
 
 
 # ============================================================================
@@ -29,10 +30,17 @@ valid_grade_bands <- c("Primary (1-3)", "Upper Primary (4-6)", "Lower Secondary 
 # Wealth categories
 wealth_categories <- c("All", "Poorest", "Second", "Middle", "Fourth", "Richest")
 
-# Wealth colors
+# Wealth quintiles only (for combination counting, excludes "All")
+wealth_quintiles_only <- c("Poorest", "Second", "Middle", "Fourth", "Richest")
+
+# Wealth colors - UNICEF palette
 wealth_colors <- list(
-  "All" = "#2E86DE", "Poorest" = "#8B0000", "Second" = "#FF8C00",
-  "Middle" = "#808080", "Fourth" = "#90EE90", "Richest" = "#006400"
+  "All" = "#00AEEF",  # UNICEF primary blue
+  "Poorest" = "#E2231A",  # UNICEF red
+  "Second" = "#F7941E",  # UNICEF orange
+  "Middle" = "#808080",  # Neutral gray
+  "Fourth" = "#1AB394",  # UNICEF teal/green
+  "Richest" = "#006B5F"  # Darker teal/green
 )
 
 # Prepare filter options
@@ -43,12 +51,6 @@ if ("subject" %in% colnames(data)) {
 }
 if ("income_level" %in% colnames(data)) {
   filter_columns$income_level <- sort(unique(data$income_level))
-}
-if ("Region" %in% colnames(data)) {
-  filter_columns$Region <- sort(unique(data$Region))
-}
-if ("year" %in% colnames(data)) {
-  filter_columns$year <- c("<Show All>", sort(unique(data$year)))
 }
 
 # Wealth categories for filtering
@@ -114,38 +116,21 @@ ui <- fluidPage(
         hr(),
         
         h4("Filters"),
-        
-        # Wealth groups selection
-        selectInput("filter_wealth",
-                    "Wealth Groups:",
-                    choices = filter_columns$wealth_categories,
-                    selected = filter_columns$wealth_categories,
-                    multiple = TRUE),
 
         # Income Level: multi-select dropdown
         if ("income_level" %in% names(filter_columns)) {
-          selectInput("filter_income",
-                      "Income Level:",
-                      choices = filter_columns$income_level,
-                      selected = filter_columns$income_level,
-                      multiple = TRUE)
-        },
-
-        # Region: multi-select dropdown
-        if ("Region" %in% names(filter_columns)) {
-          selectInput("filter_region",
-                      "Region:",
-                      choices = filter_columns$Region,
-                      selected = filter_columns$Region,
-                      multiple = TRUE)
-        },
-        
-        # Year filter
-        if ("year" %in% names(filter_columns)) {
-          selectInput("filter_year",
-                      "Year:",
-                      choices = filter_columns$year,
-                      selected = "<Show All>")
+          pickerInput(
+            inputId = "filter_income",
+            label   = "Income Level:",
+            choices = filter_columns$income_level,
+            selected = NULL,
+            multiple = TRUE,
+            options = pickerOptions(
+              actionsBox = TRUE,
+              liveSearch = TRUE,
+              noneSelectedText = "All income levels"
+            )
+          )
         },
         
         # Minimum observations filter (slider)
@@ -257,26 +242,9 @@ server <- function(input, output, session) {
         ungroup()
     }
     
-    # Apply wealth groups filter
-    if (!is.null(input$filter_wealth) && length(input$filter_wealth) > 0) {
-      df <- df %>% filter(category %in% input$filter_wealth)
-    } else {
-      df <- df %>% filter(category %in% wealth_categories)
-    }
-    
     # Apply income level filter
     if (!is.null(input$filter_income) && length(input$filter_income) > 0) {
       df <- df %>% filter(income_level %in% input$filter_income)
-    }
-    
-    # Apply region filter
-    if (!is.null(input$filter_region) && length(input$filter_region) > 0) {
-      df <- df %>% filter(Region %in% input$filter_region)
-    }
-    
-    # Apply year filter
-    if (!is.null(input$filter_year) && input$filter_year != "<Show All>") {
-      df <- df %>% filter(year == as.numeric(input$filter_year))
     }
     
     # Count before minimum observations filter (AFTER all other filters)
@@ -285,9 +253,9 @@ server <- function(input, output, session) {
 
     # Track combinations (grade band × wealth quintile) before minimum observations filter
     # Expected: 3 grade bands × 5 wealth quintiles = 15 combinations per country
-    # Exclude "All" from expected combinations as it's an aggregate, not a quintile
+    # Only count the 5 wealth quintiles (Poorest, Second, Middle, Fourth, Richest), exclude "All"
     country_combinations_before <- df %>%
-      filter(category != "All") %>%
+      filter(category %in% wealth_quintiles_only) %>%
       group_by(iso3) %>%
       summarise(
         combinations_before = n(),
@@ -305,9 +273,10 @@ server <- function(input, output, session) {
     rows_after_n_filter <- nrow(df)
     excluded_combinations <- rows_before_n_filter - rows_after_n_filter
 
-    # Count combinations per country after minimum observations filter (excluding "All")
+    # Count combinations per country after minimum observations filter
+    # Only count the 5 wealth quintiles (Poorest, Second, Middle, Fourth, Richest), exclude "All"
     country_combinations_after <- df %>%
-      filter(category != "All") %>%
+      filter(category %in% wealth_quintiles_only) %>%
       group_by(iso3) %>%
       summarise(
         combinations_after = n(),
@@ -458,7 +427,17 @@ server <- function(input, output, session) {
         
         if (nrow(w_data) == 0) next
         
-        line_width <- ifelse(wealth == "All", 3.5, 2)
+        # Keep "All" line prominent, make individual quintile lines less pronounced
+        line_width <- ifelse(wealth == "All", 3.5, 2.0)
+        line_opacity <- ifelse(wealth == "All", 1.0, 0.4)
+        marker_size <- ifelse(wealth == "All", 6, 4)
+        marker_opacity <- ifelse(wealth == "All", 1.0, 0.4)
+        
+        # Convert color to rgba for opacity control
+        color_hex <- wealth_colors[[as.character(wealth)]]
+        color_rgb <- col2rgb(color_hex)
+        color_rgba <- paste0("rgba(", color_rgb[1], ",", color_rgb[2], ",", color_rgb[3], ",", line_opacity, ")")
+        marker_color_rgba <- paste0("rgba(", color_rgb[1], ",", color_rgb[2], ",", color_rgb[3], ",", marker_opacity, ")")
         
         hover_text <- paste0(
           "<b>", facet_name, " - ", wealth, "</b><br>",
@@ -484,12 +463,12 @@ server <- function(input, output, session) {
               showarrow = FALSE,
               xanchor = "left",
               yanchor = "top",
-              xshift = 8,
-              yshift = -8,
+              xshift = 4,
+              yshift = -4,
               font = list(
                 size = 12,
                 color = "#000000",
-                family = "Arial Black, Arial, sans-serif"
+                family = "Arial, Arial, sans-serif"
               )
             )
           }
@@ -507,8 +486,8 @@ server <- function(input, output, session) {
             showlegend = show_legend,
             hovertext = hover_text,
             hoverinfo = 'text',
-            line = list(width = line_width, color = wealth_colors[[as.character(wealth)]]),
-            marker = list(size = 6, color = wealth_colors[[as.character(wealth)]]),
+            line = list(width = line_width, color = color_rgba),
+            marker = list(size = marker_size, color = marker_color_rgba),
             xaxis = if(facet_name == "Africa") "x" else "x2",
             yaxis = if(facet_name == "Africa") "y" else "y2"
           )
@@ -533,7 +512,7 @@ server <- function(input, output, session) {
         ),
         # Africa facet
         xaxis = list(
-          domain = c(0, 0.44),
+          domain = c(0, 0.48),  # 48% width - can use more space now
           title = list(text = "<b>Africa</b>", standoff = 10),
           type = "category",
           categoryorder = "array",
@@ -548,7 +527,7 @@ server <- function(input, output, session) {
         ),
         # Non-Africa facet
         xaxis2 = list(
-          domain = c(0.52, 0.9),  # leave space on the right for legend
+          domain = c(0.52, 1.0),  # 48% width (equal to Africa), with 4% gap between facets
           title = list(text = "<b>Non-Africa</b>", standoff = 10),
           type = "category",
           categoryorder = "array",
@@ -564,16 +543,17 @@ server <- function(input, output, session) {
         hovermode = 'closest',
         legend = list(
           title = list(text = "<b>Wealth Group</b>"),
-          orientation = "v",
-          x = 1,
-          y = 1,
-          xanchor = "right",
+          orientation = "h",
+          x = 0.5,  # centered horizontally
+          y = -0.15,  # below the chart
+          xanchor = "center",
+          yanchor = "top",
           bgcolor = "rgba(255, 255, 255, 0.9)",
           bordercolor = "#CCCCCC",
           borderwidth = 1
         ),
         annotations = all_category_annotations,
-        margin = list(r = 0, t = 100, l = 80, b = 80),
+        margin = list(r = 40, t = 100, l = 80, b = 120),  # increased bottom margin for legend
         plot_bgcolor = "#F8F8F8",
         paper_bgcolor = "white",
         showlegend = TRUE,
@@ -686,16 +666,8 @@ server <- function(input, output, session) {
     updateSliderInput(session, "min_observations", value = 50)
     updateSliderInput(session, "missing_combinations_tolerance", value = 15)
 
-    updateSelectInput(session, "filter_wealth", selected = filter_columns$wealth_categories)
-
     if (!is.null(input$filter_income)) {
-      updateSelectInput(session, "filter_income", selected = filter_columns$income_level)
-    }
-    if (!is.null(input$filter_region)) {
-      updateSelectInput(session, "filter_region", selected = filter_columns$Region)
-    }
-    if (!is.null(input$filter_year)) {
-      updateSelectInput(session, "filter_year", selected = "<Show All>")
+      updatePickerInput(session, "filter_income", selected = NULL)
     }
   })
 }

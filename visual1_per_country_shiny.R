@@ -7,6 +7,7 @@ library(shiny)
 library(plotly)
 library(dplyr)
 library(readr)
+library(shinyWidgets)
 
 # ============================================================================
 # DATA LOADING
@@ -78,9 +79,9 @@ if ("wealth_quintile" %in% colnames(data)) {
   filter_columns$wealth_quintile <- c("<Show All>", sort(unique(data$wealth_quintile)))
 }
 
-# Is Africa: with "Show All" option
+# Is Africa: prepare choices for pickerInput
 if ("is_africa" %in% colnames(data)) {
-  filter_columns$is_africa <- c("<Show All>", sort(unique(data$is_africa)))
+  filter_columns$is_africa <- c("All", "Africa MICS6 Countries only", "Non-Africa MICS6 Countries only")
 }
 
 # ============================================================================
@@ -152,22 +153,36 @@ ui <- fluidPage(
                       selected = "reading")
         },
         
-        # Income Level: multi-select dropdown, all selected by default
+        # Income Level: multi-select dropdown
         if ("income_level" %in% names(filter_columns)) {
-          selectInput("filter_income",
-                      "Income Level:",
-                      choices = filter_columns$income_level,
-                      selected = filter_columns$income_level,
-                      multiple = TRUE)
+          pickerInput(
+            inputId = "filter_income",
+            label   = "Income Level:",
+            choices = filter_columns$income_level,
+            selected = NULL,
+            multiple = TRUE,
+            options = pickerOptions(
+              actionsBox = TRUE,
+              liveSearch = TRUE,
+              noneSelectedText = "All income levels"
+            )
+          )
         },
 
-        # Region: multi-select dropdown, all selected by default
+        # Region: multi-select dropdown
         if ("Region" %in% names(filter_columns)) {
-          selectInput("filter_region",
-                      "Region:",
-                      choices = filter_columns$Region,
-                      selected = filter_columns$Region,
-                      multiple = TRUE)
+          pickerInput(
+            inputId = "filter_region",
+            label   = "Region:",
+            choices = filter_columns$Region,
+            selected = NULL,
+            multiple = TRUE,
+            options = pickerOptions(
+              actionsBox = TRUE,
+              liveSearch = TRUE,
+              noneSelectedText = "All regions"
+            )
+          )
         },
         
         # Wealth Quintile: dropdown with "Show All"
@@ -178,12 +193,18 @@ ui <- fluidPage(
                       selected = "<Show All>")
         },
         
-        # Is Africa: dropdown with "Show All"
+        # Geographic Region: pickerInput for consistency
         if ("is_africa" %in% names(filter_columns)) {
-          selectInput("filter_africa",
-                      "Is Africa:",
-                      choices = filter_columns$is_africa,
-                      selected = "<Show All>")
+          pickerInput(
+            inputId = "filter_africa",
+            label   = "Country Grouping:",
+            choices = filter_columns$is_africa,
+            selected = NULL,
+            multiple = FALSE,
+            options = pickerOptions(
+              noneSelectedText = "All regions"
+            )
+          )
         },
         
         # Minimum observations filter (slider)
@@ -314,14 +335,6 @@ server <- function(input, output, session) {
     metric <- metric_settings()
     metric_col <- metric$col
     
-    # Keep only the latest year for each country to avoid mixing years
-    if ("year" %in% colnames(df)) {
-      df <- df %>%
-        group_by(iso3) %>%
-        filter(year == max(year, na.rm = TRUE)) %>%
-        ungroup()
-    }
-    
     # Category filter: always applies (no "Show All" option)
     if (!is.null(input$filter_category)) {
       df <- df %>% filter(category == input$filter_category)
@@ -347,9 +360,13 @@ server <- function(input, output, session) {
       df <- df %>% filter(wealth_quintile == input$filter_wealth)
     }
     
-    # Is Africa filter: only apply if not "Show All"
-    if (!is.null(input$filter_africa) && input$filter_africa != "<Show All>") {
-      df <- df %>% filter(is_africa == input$filter_africa)
+    # Geographic Region filter: apply if a specific option is selected
+    if (!is.null(input$filter_africa) && input$filter_africa != "All" && input$filter_africa != "") {
+      if (input$filter_africa == "Africa MICS6 Countries only") {
+        df <- df %>% filter(is_africa == TRUE)
+      } else if (input$filter_africa == "Non-Africa MICS6 Countries only") {
+        df <- df %>% filter(is_africa == FALSE)
+      }
     }
     
     # Remove rows with missing grade
@@ -458,16 +475,8 @@ server <- function(input, output, session) {
     excluded_combinations <- rows_before_n_filter - rows_after_n_filter
     
     # Calculate benchmarks summary using data BEFORE category filter but AFTER other filters
-    # Start fresh from data and apply same filters as above (year, subject, income, region, africa, min_obs)
+    # Start fresh from data and apply same filters as above (subject, income, region, africa, min_obs)
     df_median_base <- data
-
-    # Apply same year filter
-    if ("year" %in% colnames(df_median_base)) {
-      df_median_base <- df_median_base %>%
-        group_by(iso3) %>%
-        filter(year == max(year, na.rm = TRUE)) %>%
-        ungroup()
-    }
 
     # Apply subject filter (same as main data)
     if (!is.null(input$filter_subject)) {
@@ -484,9 +493,13 @@ server <- function(input, output, session) {
       df_median_base <- df_median_base %>% filter(Region %in% input$filter_region)
     }
 
-    # Apply is_africa filter
-    if (!is.null(input$filter_africa) && input$filter_africa != "<Show All>") {
-      df_median_base <- df_median_base %>% filter(is_africa == input$filter_africa)
+    # Apply geographic region filter
+    if (!is.null(input$filter_africa) && input$filter_africa != "All" && input$filter_africa != "") {
+      if (input$filter_africa == "Africa only") {
+        df_median_base <- df_median_base %>% filter(is_africa == TRUE)
+      } else if (input$filter_africa == "Non-Africa only") {
+        df_median_base <- df_median_base %>% filter(is_africa == FALSE)
+      }
     }
 
     # Apply minimum observations filter
@@ -553,14 +566,6 @@ server <- function(input, output, session) {
     # but forcing category == "All" for benchmark calculation
     df_median_base <- data
 
-    # Apply same year filter
-    if ("year" %in% colnames(df_median_base)) {
-      df_median_base <- df_median_base %>%
-        group_by(iso3) %>%
-        filter(year == max(year, na.rm = TRUE)) %>%
-        ungroup()
-    }
-
     # Apply subject filter (same as main data)
     if (!is.null(input$filter_subject)) {
       df_median_base <- df_median_base %>% filter(subject == input$filter_subject)
@@ -576,9 +581,13 @@ server <- function(input, output, session) {
       df_median_base <- df_median_base %>% filter(Region %in% input$filter_region)
     }
 
-    # Apply is_africa filter
-    if (!is.null(input$filter_africa) && input$filter_africa != "<Show All>") {
-      df_median_base <- df_median_base %>% filter(is_africa == input$filter_africa)
+    # Apply geographic region filter
+    if (!is.null(input$filter_africa) && input$filter_africa != "All" && input$filter_africa != "") {
+      if (input$filter_africa == "Africa MICS6 Countries only") {
+        df_median_base <- df_median_base %>% filter(is_africa == TRUE)
+      } else if (input$filter_africa == "Non-Africa MICS6 Countries only") {
+        df_median_base <- df_median_base %>% filter(is_africa == FALSE)
+      }
     }
 
     # Apply minimum observations filter
@@ -782,19 +791,7 @@ server <- function(input, output, session) {
     countries_missing_cats <- attr(df, "countries_missing_categories")
     medians_summary <- attr(df, "medians_summary")
 
-    # Get year information
-    year_info <- ""
-    if ("year" %in% colnames(df)) {
-      years_used <- sort(unique(df$year))
-      if (length(years_used) == 1) {
-        year_info <- paste0("- Year: ", years_used, "\n")
-      } else {
-        year_info <- paste0("- Years: ", paste(years_used, collapse = ", "),
-                           " (latest per country)\n")
-      }
-    }
-
-      # Median information
+    # Median information
     median_info <- ""
     if (!is.null(medians_summary) && nrow(medians_summary) > 0) {
       median_lines <- apply(medians_summary, 1, function(row) {
@@ -819,7 +816,6 @@ server <- function(input, output, session) {
       "- Unique countries: ", length(unique(df$iso3)), "\n",
       "- Grade range: ", min(df$grade_numeric, na.rm = TRUE), " - ",
                          max(df$grade_numeric, na.rm = TRUE), "\n",
-      year_info,
       median_info
     )
 
@@ -896,14 +892,14 @@ server <- function(input, output, session) {
     # Reset missing grades tolerance to 8
     updateSliderInput(session, "missing_grades_tolerance", value = 8)
 
-    # Reset income level to all selected
+    # Reset income level
     if (!is.null(input$filter_income)) {
-      updateSelectInput(session, "filter_income", selected = filter_columns$income_level)
+      updatePickerInput(session, "filter_income", selected = NULL)
     }
 
-    # Reset region to all selected
+    # Reset region
     if (!is.null(input$filter_region)) {
-      updateSelectInput(session, "filter_region", selected = filter_columns$Region)
+      updatePickerInput(session, "filter_region", selected = NULL)
     }
     
     # Reset wealth quintile to "Show All"
@@ -911,9 +907,9 @@ server <- function(input, output, session) {
       updateSelectInput(session, "filter_wealth", selected = "<Show All>")
     }
     
-    # Reset is_africa to "Show All"
+    # Reset geographic region
     if (!is.null(input$filter_africa)) {
-      updateSelectInput(session, "filter_africa", selected = "<Show All>")
+      updatePickerInput(session, "filter_africa", selected = NULL)
     }
   })
 }
