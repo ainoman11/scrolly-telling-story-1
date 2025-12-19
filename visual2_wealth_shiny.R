@@ -11,7 +11,12 @@ library(readr)
 # ============================================================================
 
 data_file <- "data/learning_gradient_bands_with_loess.csv"
+countries_file <- "data/unicef_countries.csv"
 data <- read_csv(data_file, show_col_types = FALSE)
+
+# Load country names lookup (iso3 -> country)
+countries_lookup <- read_csv(countries_file, show_col_types = FALSE) %>%
+  select(iso3, country)
 
 # Valid grade bands
 valid_grade_bands <- c("Primary (1-3)", "Upper Primary (4-6)", "Lower Secondary (7-9)")
@@ -50,123 +55,147 @@ filter_columns$wealth_categories <- wealth_categories
 
 ui <- fluidPage(
   titlePanel("Visual 2: Wealth Gradients - Foundational Skills Across Education Stages"),
-  
-  sidebarLayout(
-    sidebarPanel(
+
+  tags$head(
+    tags$style(HTML("
+      .unicef-accent {
+        border-left: 4px solid #00AEEF;
+        padding-left: 8px;
+      }
+      .wealth-chart-container {
+        width: 100% !important;
+        height: 700px;        /* fixed container height so inner widget can use 100% */
+        min-height: 400px;
+      }
+      .plotly.html-widget,
+      .plotly {
+        width: 100% !important;
+        height: 100% !important; /* fill the container height */
+      }
+      @media (max-width: 991px) {
+        .lg-column {
+          margin-bottom: 20px;
+        }
+      }
+    "))
+  ),
+
+  fluidRow(
+    # LEFT COLUMN: Filters (3/12)
+    column(
       width = 3,
-      
-      h4("Settings"),
-      
-      # Subject selection
-      selectInput("subject",
-                  "Subject:",
-                  choices = filter_columns$subject,
-                  selected = "reading"),
-      
-      # Metric type (mean/median with or without LOESS smoothing)
-      selectInput("metric_type",
-                  "Metric:",
-                  choices = c(
-                    "Median" = "median",
-                    "Median with LOESS" = "median_loess",
-                    "Mean" = "mean",
-                    "Mean with LOESS" = "mean_loess"
-                  ),
-                  selected = "mean_loess"),
-      
-      hr(),
-      
-      h4("Filters"),
-      
-      # Wealth groups selection
-      selectInput("filter_wealth",
-                  "Wealth Groups:",
-                  choices = filter_columns$wealth_categories,
-                  selected = filter_columns$wealth_categories,
-                  multiple = TRUE),
+      class = "lg-column",
+      wellPanel(
+        h4("Settings", class = "unicef-accent"),
+        
+        # Subject selection
+        selectInput("subject",
+                    "Subject:",
+                    choices = filter_columns$subject,
+                    selected = "reading"),
+        
+        # Metric type (mean/median with or without LOESS smoothing)
+        selectInput("metric_type",
+                    "Metric:",
+                    choices = c(
+                      "Median" = "median",
+                      "Median with LOESS" = "median_loess",
+                      "Mean" = "mean",
+                      "Mean with LOESS" = "mean_loess"
+                    ),
+                    selected = "mean_loess"),
+        
+        hr(),
+        
+        h4("Filters"),
+        
+        # Wealth groups selection
+        selectInput("filter_wealth",
+                    "Wealth Groups:",
+                    choices = filter_columns$wealth_categories,
+                    selected = filter_columns$wealth_categories,
+                    multiple = TRUE),
 
-      # Income Level: multi-select dropdown
-      if ("income_level" %in% names(filter_columns)) {
-        selectInput("filter_income",
-                    "Income Level:",
-                    choices = filter_columns$income_level,
-                    selected = filter_columns$income_level,
-                    multiple = TRUE)
-      },
+        # Income Level: multi-select dropdown
+        if ("income_level" %in% names(filter_columns)) {
+          selectInput("filter_income",
+                      "Income Level:",
+                      choices = filter_columns$income_level,
+                      selected = filter_columns$income_level,
+                      multiple = TRUE)
+        },
 
-      # Region: multi-select dropdown
-      if ("Region" %in% names(filter_columns)) {
-        selectInput("filter_region",
-                    "Region:",
-                    choices = filter_columns$Region,
-                    selected = filter_columns$Region,
-                    multiple = TRUE)
-      },
-      
-      # Year filter
-      if ("year" %in% names(filter_columns)) {
-        selectInput("filter_year",
-                    "Year:",
-                    choices = filter_columns$year,
-                    selected = "<Show All>")
-      },
-      
-      # Minimum observations filter (slider)
-      sliderInput("min_observations",
-                  "Minimum Observations (n):",
-                  min = 0,
-                  max = 100,
-                  value = 50,
-                  step = 5),
+        # Region: multi-select dropdown
+        if ("Region" %in% names(filter_columns)) {
+          selectInput("filter_region",
+                      "Region:",
+                      choices = filter_columns$Region,
+                      selected = filter_columns$Region,
+                      multiple = TRUE)
+        },
+        
+        # Year filter
+        if ("year" %in% names(filter_columns)) {
+          selectInput("filter_year",
+                      "Year:",
+                      choices = filter_columns$year,
+                      selected = "<Show All>")
+        },
+        
+        # Minimum observations filter (slider)
+        sliderInput("min_observations",
+                    "Minimum Observations (n):",
+                    min = 0,
+                    max = 100,
+                    value = 50,
+                    step = 5),
 
-      # Missing combinations tolerance filter (slider)
-      sliderInput("missing_combinations_tolerance",
-                  "Missing Combinations Tolerance:",
-                  min = 1,
-                  max = 15,
-                  value = 15,
-                  step = 1),
+        # Missing combinations tolerance filter (slider)
+        sliderInput("missing_combinations_tolerance",
+                    "Missing Combinations Tolerance:",
+                    min = 1,
+                    max = 15,
+                    value = 15,
+                    step = 1),
 
-      helpText("Minimum observations: Excludes individual combinations with fewer observations than this threshold."),
-      helpText("Missing combinations tolerance: Maximum missing combinations allowed per country (1 = complete data with all 15 combinations, 15 = all countries included). Each country should have 15 combinations: 3 grade bands × 5 wealth quintiles (Poorest-Richest, excluding 'All')."),
-      
-      hr(),
-      
-      # Reset filters button
-      actionButton("reset_filters", "Reset All Filters", 
-                   class = "btn-warning")
+        helpText("Minimum observations: Excludes individual combinations with fewer observations than this threshold."),
+        helpText("Missing combinations tolerance: Maximum missing combinations allowed per country (1 = complete data with all 15 combinations, 15 = all countries included). Each country should have 15 combinations: 3 grade bands × 5 wealth quintiles (Poorest-Richest, excluding 'All')."),
+        
+        hr(),
+        
+        # Reset filters button
+        actionButton("reset_filters", "Reset All Filters", 
+                     class = "btn-warning")
+      )
     ),
-    
-    mainPanel(
-      width = 9,
-      
-      fluidRow(
-        column(
-          width = 9,
-          # Plot output - fixed dimensions for two facets
-          plotlyOutput("main_chart", height = "900px", width = "1200px")
-        ),
-        column(
-          width = 3,
-          # Missing combinations list
-          wellPanel(
-            h4("Countries with Missing Combinations"),
-            htmlOutput("missing_countries_list"),
-            style = "height: 900px; overflow-y: auto;"
-          )
-        )
+
+    # MIDDLE COLUMN: Chart + Summary + Info (6/12)
+    column(
+      width = 6,
+      class = "lg-column",
+      div(
+        class = "wealth-chart-container",
+        plotlyOutput("main_chart", height = "100%", width = "100%")
       ),
-      
-      # Data summary panel
+      br(),
       wellPanel(
         h4("Data Summary"),
         verbatimTextOutput("data_summary")
       ),
-      
-      # Information panel below data summary
       wellPanel(
         h4("Chart Information"),
         htmlOutput("chart_info")
+      )
+    ),
+
+    # RIGHT COLUMN: Missing combinations table (3/12)
+    column(
+      width = 3,
+      class = "lg-column",
+      wellPanel(
+        h4("Countries with Missing Combinations"),
+        htmlOutput("missing_countries_list"),
+        style = "max-height: 800px; overflow-y: auto;"
       )
     )
   )
@@ -309,6 +338,10 @@ server <- function(input, output, session) {
         missing_count = missing_combinations,
         missing_percentage = round((missing_combinations / 15) * 100, 1),  # Out of 15 expected
         expected_total = 15
+      ) %>%
+      left_join(countries_lookup, by = "iso3") %>%
+      mutate(
+        country_name = ifelse(is.na(country) | country == "", iso3, country)
       ) %>%
       arrange(desc(missing_count), iso3)
 
@@ -498,7 +531,7 @@ server <- function(input, output, session) {
         ),
         # Africa facet
         xaxis = list(
-          domain = c(0, 0.40),
+          domain = c(0, 0.44),
           title = list(text = "<b>Africa</b>", standoff = 10),
           type = "category",
           categoryorder = "array",
@@ -513,7 +546,7 @@ server <- function(input, output, session) {
         ),
         # Non-Africa facet
         xaxis2 = list(
-          domain = c(0.52, 0.92),
+          domain = c(0.52, 0.9),  # leave space on the right for legend
           title = list(text = "<b>Non-Africa</b>", standoff = 10),
           type = "category",
           categoryorder = "array",
@@ -530,26 +563,25 @@ server <- function(input, output, session) {
         legend = list(
           title = list(text = "<b>Wealth Group</b>"),
           orientation = "v",
-          x = 1.02,
+          x = 1,
           y = 1,
+          xanchor = "right",
           bgcolor = "rgba(255, 255, 255, 0.9)",
           bordercolor = "#CCCCCC",
           borderwidth = 1
         ),
         annotations = all_category_annotations,
-        margin = list(r = 250, t = 100, l = 80, b = 80),
+        margin = list(r = 0, t = 100, l = 80, b = 80),
         plot_bgcolor = "#F8F8F8",
         paper_bgcolor = "white",
         showlegend = TRUE,
-        autosize = FALSE,
-        width = 1200,
-        height = 900
+        autosize = TRUE
       ) %>%
       config(
         displayModeBar = TRUE,
         displaylogo = FALSE,
         staticPlot = FALSE,
-        responsive = FALSE
+        responsive = TRUE
       )
 
     return(fig)
@@ -667,9 +699,9 @@ server <- function(input, output, session) {
       bg_color <- if (row$dropped) "background-color: #ffcccc;" else ""
       paste0(
         "<tr style='", bg_color, "'>",
-        "<td style='padding: 5px; border-bottom: 1px solid #ddd;'><strong>", row$iso3, "</strong></td>",
-        "<td style='padding: 5px; border-bottom: 1px solid #ddd; text-align: center;'><strong>", row$missing_count, "/15</strong></td>",
-        "<td style='padding: 5px; border-bottom: 1px solid #ddd; text-align: center;'><strong>", row$missing_percentage, "%</strong></td>",
+        "<td style='padding: 5px; border-bottom: 1px solid #ddd; vertical-align: middle; white-space: normal; word-wrap: break-word;'>", row$country_name, "</td>",
+        "<td style='padding: 5px; border-bottom: 1px solid #ddd; text-align: left; vertical-align: middle; width: 55px;'><strong>", row$missing_count, "/15</strong></td>",
+        "<td style='padding: 5px; border-bottom: 1px solid #ddd; text-align: center; vertical-align: middle; width: 45px;'><strong>", row$missing_percentage, "%</strong></td>",
         "</tr>"
       )
     })
@@ -680,9 +712,9 @@ server <- function(input, output, session) {
       "<table style='width: 100%; font-size: 0.9em; border-collapse: collapse;'>",
       "<thead>",
       "<tr style='background-color: #f5f5f5;'>",
-      "<th style='padding: 5px; text-align: left; border-bottom: 2px solid #ddd;'>Country</th>",
-      "<th style='padding: 5px; text-align: center; border-bottom: 2px solid #ddd;'>Missing</th>",
-      "<th style='padding: 5px; text-align: center; border-bottom: 2px solid #ddd;'>%</th>",
+      "<th style='padding: 5px; text-align: left; border-bottom: 2px solid #ddd; vertical-align: middle; border-right: 1px solid #bbb;'>Country</th>",
+      "<th style='padding: 5px; text-align: center; border-bottom: 2px solid #ddd; vertical-align: middle; width: 55px; border-right: 1px solid #bbb;'>Missing</th>",
+      "<th style='padding: 5px; text-align: center; border-bottom: 2px solid #ddd; vertical-align: middle; width: 45px;'>%</th>",
       "</tr>",
       "</thead>",
       "<tbody>",

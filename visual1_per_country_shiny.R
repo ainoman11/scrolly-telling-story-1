@@ -13,9 +13,14 @@ library(readr)
 # ============================================================================
 
 data_file <- "data/learning_gradient_raw_with_loess.csv"
+countries_file <- "data/unicef_countries.csv"
 
 # Load data
 data <- read_csv(data_file, show_col_types = FALSE)
+
+# Load country names lookup (iso3 -> country)
+countries_lookup <- read_csv(countries_file, show_col_types = FALSE) %>%
+  select(iso3, country)
 
 # ============================================================================
 # DATA PREPARATION
@@ -85,148 +90,158 @@ ui <- fluidPage(
 
   tags$head(
     tags$style(HTML("
+      /* UNICEF-inspired accent color */
+      .unicef-accent {
+        border-left: 4px solid #00AEEF;
+        padding-left: 8px;
+      }
       .chart-container {
         width: 100% !important;
-        height: auto !important;
+        height: 700px;        /* fixed container height so inner widget can use 100% */
         min-height: 400px;
       }
-      .plotly.html-widget {
+      .plotly.html-widget,
+      .plotly {
         width: 100% !important;
-        height: auto !important;
+        height: 100% !important; /* fill the container height */
+      }
+      @media (max-width: 991px) {
+        /* Stack columns on smaller laptop/tablet screens */
+        .lg-column {
+          margin-bottom: 20px;
+        }
       }
     "))
   ),
-  
-  sidebarLayout(
-    sidebarPanel(
+
+  fluidRow(
+    # LEFT COLUMN: Filters (3/12)
+    column(
       width = 3,
-      
-      h4("Data Information"),
-      helpText("This dataset shows LOESS-smoothed proficiency rates. Filtering by observation count (n) ensures data quality."),
-      
-      hr(),
-      
-      h4("Filters"),
-      
-      # Metric type: dropdown to select how proficiency is calculated
-      selectInput("metric_type",
-                  "Metric:",
-                  choices = c(
-                    "Median" = "median",
-                    "Median with LOESS" = "median_loess",
-                    "Mean" = "mean",
-                    "Mean with LOESS" = "mean_loess"
-                  ),
-                  selected = "median_loess"),
-      
-      # Category: dropdown, default to "All"
-      if ("category" %in% names(filter_columns)) {
-        selectInput("filter_category",
-                    "Category:",
-                    choices = filter_columns$category,
-                    selected = "All")
-      },
-      
-      # Subject: dropdown, default to "reading"
-      if ("subject" %in% names(filter_columns)) {
-        selectInput("filter_subject",
-                    "Subject:",
-                    choices = filter_columns$subject,
-                    selected = "reading")
-      },
-      
-      # Income Level: multi-select dropdown, all selected by default
-      if ("income_level" %in% names(filter_columns)) {
-        selectInput("filter_income",
-                    "Income Level:",
-                    choices = filter_columns$income_level,
-                    selected = filter_columns$income_level,
-                    multiple = TRUE)
-      },
+      class = "lg-column",
+      wellPanel(
+        h4("Data Information", class = "unicef-accent"),
+        helpText("This dataset shows LOESS-smoothed proficiency rates. Filtering by observation count (n) ensures data quality."),
+        
+        hr(),
+        
+        h4("Filters"),
+        
+        # Metric type: dropdown to select how proficiency is calculated
+        selectInput("metric_type",
+                    "Metric:",
+                    choices = c(
+                      "Median" = "median",
+                      "Median with LOESS" = "median_loess",
+                      "Mean" = "mean",
+                      "Mean with LOESS" = "mean_loess"
+                    ),
+                    selected = "median_loess"),
+        
+        # Category: dropdown, default to "All"
+        if ("category" %in% names(filter_columns)) {
+          selectInput("filter_category",
+                      "Category:",
+                      choices = filter_columns$category,
+                      selected = "All")
+        },
+        
+        # Subject: dropdown, default to "reading"
+        if ("subject" %in% names(filter_columns)) {
+          selectInput("filter_subject",
+                      "Subject:",
+                      choices = filter_columns$subject,
+                      selected = "reading")
+        },
+        
+        # Income Level: multi-select dropdown, all selected by default
+        if ("income_level" %in% names(filter_columns)) {
+          selectInput("filter_income",
+                      "Income Level:",
+                      choices = filter_columns$income_level,
+                      selected = filter_columns$income_level,
+                      multiple = TRUE)
+        },
 
-      # Region: multi-select dropdown, all selected by default
-      if ("Region" %in% names(filter_columns)) {
-        selectInput("filter_region",
-                    "Region:",
-                    choices = filter_columns$Region,
-                    selected = filter_columns$Region,
-                    multiple = TRUE)
-      },
-      
-      # Wealth Quintile: dropdown with "Show All"
-      if ("wealth_quintile" %in% names(filter_columns)) {
-        selectInput("filter_wealth",
-                    "Wealth Quintile:",
-                    choices = filter_columns$wealth_quintile,
-                    selected = "<Show All>")
-      },
-      
-      # Is Africa: dropdown with "Show All"
-      if ("is_africa" %in% names(filter_columns)) {
-        selectInput("filter_africa",
-                    "Is Africa:",
-                    choices = filter_columns$is_africa,
-                    selected = "<Show All>")
-      },
-      
-      # Minimum observations filter (slider)
-      sliderInput("min_observations",
-                  "Minimum Observations (n):",
-                  min = 0,
-                  max = 100,
-                  value = 50,
-                  step = 5),
+        # Region: multi-select dropdown, all selected by default
+        if ("Region" %in% names(filter_columns)) {
+          selectInput("filter_region",
+                      "Region:",
+                      choices = filter_columns$Region,
+                      selected = filter_columns$Region,
+                      multiple = TRUE)
+        },
+        
+        # Wealth Quintile: dropdown with "Show All"
+        if ("wealth_quintile" %in% names(filter_columns)) {
+          selectInput("filter_wealth",
+                      "Wealth Quintile:",
+                      choices = filter_columns$wealth_quintile,
+                      selected = "<Show All>")
+        },
+        
+        # Is Africa: dropdown with "Show All"
+        if ("is_africa" %in% names(filter_columns)) {
+          selectInput("filter_africa",
+                      "Is Africa:",
+                      choices = filter_columns$is_africa,
+                      selected = "<Show All>")
+        },
+        
+        # Minimum observations filter (slider)
+        sliderInput("min_observations",
+                    "Minimum Observations (n):",
+                    min = 0,
+                    max = 100,
+                    value = 50,
+                    step = 5),
 
-      # Missing grades tolerance filter (slider)
-      sliderInput("missing_grades_tolerance",
-                  "Missing Grades Tolerance:",
-                  min = 1,
-                  max = 8,
-                  value = 8,
-                  step = 1),
+        # Missing grades tolerance filter (slider)
+        sliderInput("missing_grades_tolerance",
+                    "Missing Grades Tolerance:",
+                    min = 1,
+                    max = 8,
+                    value = 8,
+                    step = 1),
 
-      helpText("Minimum observations: Excludes country-grade combinations with fewer observations than this threshold."),
-      helpText("Missing grades tolerance: Maximum number of missing grades allowed per country (1 = complete data with all 8 grades, 8 = all countries included)."),
-      
-      hr(),
-      
-      # Reset filters button
-      actionButton("reset_filters", "Reset All Filters", 
-                   class = "btn-warning")
+        helpText("Minimum observations: Excludes country-grade combinations with fewer observations than this threshold."),
+        helpText("Missing grades tolerance: Maximum number of missing grades allowed per country (1 = complete data with all 8 grades, 8 = all countries included)."),
+        
+        hr(),
+        
+        # Reset filters button
+        actionButton("reset_filters", "Reset All Filters", 
+                     class = "btn-warning")
+      )
     ),
-    
-    mainPanel(
-      width = 9,
-      
-      fluidRow(
-        column(
-          width = 8,
-          # Plot output - full width, resizable
-          div(class = "chart-container",
-              plotlyOutput("line_chart", height = "900px")
-          )
-        ),
-        column(
-          width = 4,
-          # Missing countries list
-          wellPanel(
-            h4("Countries with Missing Grades"),
-            htmlOutput("missing_countries_list"),
-            style = "height: 900px; overflow-y: auto;"
-          )
-        )
+
+    # MIDDLE COLUMN: Chart + Summary + Info (6/12)
+    column(
+      width = 6,
+      class = "lg-column",
+      div(
+        class = "chart-container",
+        plotlyOutput("line_chart", height = "100%", width = "100%")
       ),
-      
-      # Data summary panel
+      br(),
       wellPanel(
         h4("Data Summary"),
         verbatimTextOutput("data_summary")
       ),
-      
-      # Information panel below data summary
       wellPanel(
         h4("Chart Information"),
         htmlOutput("chart_info")
+      )
+    ),
+
+    # RIGHT COLUMN: Table / Missing countries (3/12)
+    column(
+      width = 3,
+      class = "lg-column",
+      wellPanel(
+        h4("Countries with Missing Grades"),
+        htmlOutput("missing_countries_list"),
+        style = "max-height: 800px; overflow-y: auto;"
       )
     )
   )
@@ -435,11 +450,15 @@ server <- function(input, output, session) {
       group_by(iso3) %>%
       summarise(grades_after = n_distinct(grade_numeric), .groups = "drop")
     
-    # Add dropped flag to missing grades detail
+    # Add dropped flag and country names to missing grades detail
     countries_with_missing_grades <- countries_with_missing_grades_before_tolerance %>%
       mutate(
         dropped = iso3 %in% countries_dropped_by_tolerance,
         missing = grades_before - grades_after_min_obs
+      ) %>%
+      left_join(countries_lookup, by = "iso3") %>%
+      mutate(
+        country_name = ifelse(is.na(country) | country == "", iso3, country)
       ) %>%
       arrange(desc(missing), iso3)  # Order by missing grades descending
     
@@ -719,7 +738,8 @@ server <- function(input, output, session) {
           title = "<b>Grade (1-8)</b>",
           range = c(0.5, 8.5),
           dtick = 1,
-          gridcolor = "#E5E5E5"
+          gridcolor = "#E5E5E5",
+          domain = c(0, 0.8)  # leave room on the right for legend inside the figure
         ),
         yaxis = list(
           title = paste0("<b>", metric$axis_title, "</b>"),
@@ -730,24 +750,23 @@ server <- function(input, output, session) {
         legend = list(
           title = list(text = "<b>Countries</b>"),
           orientation = "v",
-          x = 1.02,
+          x = 1,          # right edge of the plotting area
           y = 1,
-          bgcolor = "rgba(255, 255, 255, 0.8)",
+          xanchor = "right",
+          bgcolor = "rgba(255, 255, 255, 0.6)",
           bordercolor = "#CCCCCC",
           borderwidth = 1
         ),
-        margin = list(r = 250, t = 80, l = 80, b = 80),
+        margin = list(r = 0, t = 80, l = 80, b = 80),
         plot_bgcolor = "#F8F8F8",
         paper_bgcolor = "white",
-        autosize = FALSE,
-        width = 900,
-        height = 900
+        autosize = TRUE
       ) %>%
       config(
         displayModeBar = TRUE,
         displaylogo = FALSE,
         staticPlot = FALSE,
-        responsive = FALSE
+        responsive = TRUE
       )
     
     return(fig)
@@ -890,9 +909,9 @@ server <- function(input, output, session) {
       bg_color <- if (row$dropped) "background-color: #ffcccc;" else ""
       paste0(
         "<tr style='", bg_color, "'>",
-        "<td style='padding: 5px; border-bottom: 1px solid #ddd;'><strong>", row$iso3, "</strong></td>",
-        "<td style='padding: 5px; border-bottom: 1px solid #ddd; text-align: center;'><strong>", row$missing, "/", row$grades_before, "</strong></td>",
-        "<td style='padding: 5px; border-bottom: 1px solid #ddd; text-align: center;'><strong>", row$pct_missing, "%</strong></td>",
+        "<td style='padding: 5px; border-bottom: 1px solid #ddd; vertical-align: middle; white-space: normal; word-wrap: break-word;'>", row$country_name, "</td>",
+        "<td style='padding: 5px; border-bottom: 1px solid #ddd; text-align: left; vertical-align: middle; width: 55px;'><strong>", row$missing, "/", row$grades_before, "</strong></td>",
+        "<td style='padding: 5px; border-bottom: 1px solid #ddd; text-align: center; vertical-align: middle; width: 45px;'><strong>", row$pct_missing, "%</strong></td>",
         "</tr>"
       )
     })
@@ -903,9 +922,9 @@ server <- function(input, output, session) {
       "<table style='width: 100%; font-size: 0.9em; border-collapse: collapse;'>",
       "<thead>",
       "<tr style='background-color: #f5f5f5;'>",
-      "<th style='padding: 5px; text-align: left; border-bottom: 2px solid #ddd;'>Country</th>",
-      "<th style='padding: 5px; text-align: center; border-bottom: 2px solid #ddd;'>Missing</th>",
-      "<th style='padding: 5px; text-align: center; border-bottom: 2px solid #ddd;'>%</th>",
+      "<th style='padding: 5px; text-align: left; border-bottom: 2px solid #ddd; vertical-align: middle; border-right: 1px solid #ccc;'>Country</th>",
+      "<th style='padding: 5px; text-align: center; border-bottom: 2px solid #ddd; vertical-align: middle; width: 55px; border-right: 1px solid #ccc;'>Missing</th>",
+      "<th style='padding: 5px; text-align: center; border-bottom: 2px solid #ddd; vertical-align: middle; width: 45px;'>%</th>",
       "</tr>",
       "</thead>",
       "<tbody>",
