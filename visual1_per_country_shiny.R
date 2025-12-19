@@ -261,6 +261,39 @@ ui <- fluidPage(
 
     .well { background: transparent; border: none; box-shadow: none; padding: 0; }
 
+    /* --- Fix Shiny's fixed-width input containers looking left-aligned --- */
+
+    /* Keep a nice max width, but allow shrinking on small screens */
+    .panel-card .shiny-input-container:not(.shiny-input-container-inline){
+      width: 100% !important;
+      max-width: 320px;
+      margin-left: auto !important;
+      margin-right: auto !important;
+    }
+
+    /* Ensure the label + control align nicely within that centered block */
+    .panel-card .shiny-input-container:not(.shiny-input-container-inline) .control-label{
+      display: block;
+      text-align: left;
+    }
+
+    /* Make sure dropdowns and picker buttons fill the centered block */
+    .panel-card .shiny-input-container .form-control,
+    .panel-card .bootstrap-select,
+    .panel-card .bootstrap-select > .dropdown-toggle{
+      width: 100% !important;
+    }
+
+    /* Sliders also fill nicely */
+    .panel-card .irs{
+      width: 100% !important;
+    }
+
+    /* Optional: slightly tighter vertical rhythm inside sidebar */
+    .panel-card .form-group{
+      margin-bottom: 12px;
+    }
+
   "))
   ),
 
@@ -268,8 +301,8 @@ ui <- fluidPage(
     class = "app-header",
     div(
       class = "accent-bar",
-      h2("Learning Gradient Interactive Line Chart", class = "app-title"),
-      p("Interactive country learning gradients with quality controls (minimum n and missing grades tolerance). Styling only: same logic, same behavior.",
+      h2("Foundational Skills Growth Across Grades", class = "app-title"),
+      p("Explore reading and numeracy proficiency from Grade 1 to Grade 8, with sample-size and completeness filters for quality assurance.",
         class = "app-subtitle")
     )
   ),
@@ -281,7 +314,7 @@ ui <- fluidPage(
       class = "lg-column",
       div(
         class = "panel-card sidebar-card",
-        h4("Filters", class = "section-title accent-bar"),
+        h4("Settings", class = "section-title accent-bar"),
         
         # Metric type: dropdown to select how proficiency is calculated
         selectInput("metric_type",
@@ -294,14 +327,6 @@ ui <- fluidPage(
                     ),
                     selected = "median_loess"),
         
-        # Category: dropdown, default to "All"
-        if ("category" %in% names(filter_columns)) {
-          selectInput("filter_category",
-                      "Category:",
-                      choices = filter_columns$category,
-                      selected = "All")
-        },
-        
         # Subject: dropdown, default to "reading"
         if ("subject" %in% names(filter_columns)) {
           selectInput("filter_subject",
@@ -309,6 +334,18 @@ ui <- fluidPage(
                       choices = c("Foundational Reading" = "reading",
                                   "Foundational Numeracy" = "numeracy"),
                       selected = "reading")
+        },
+        
+        hr(),
+        
+        h4("Filters", class = "section-title accent-bar"),
+        
+        # Category: dropdown, default to "All"
+        if ("category" %in% names(filter_columns)) {
+          selectInput("filter_category",
+                      "Category:",
+                      choices = filter_columns$category,
+                      selected = "All")
         },
         
         # Income Level: multi-select dropdown

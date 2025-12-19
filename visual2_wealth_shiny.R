@@ -233,6 +233,39 @@ ui <- fluidPage(
 
     .well { background: transparent; border: none; box-shadow: none; padding: 0; }
 
+    /* --- Fix Shiny's fixed-width input containers looking left-aligned --- */
+
+    /* Keep a nice max width, but allow shrinking on small screens */
+    .panel-card .shiny-input-container:not(.shiny-input-container-inline){
+      width: 100% !important;
+      max-width: 320px;
+      margin-left: auto !important;
+      margin-right: auto !important;
+    }
+
+    /* Ensure the label + control align nicely within that centered block */
+    .panel-card .shiny-input-container:not(.shiny-input-container-inline) .control-label{
+      display: block;
+      text-align: left;
+    }
+
+    /* Make sure dropdowns and picker buttons fill the centered block */
+    .panel-card .shiny-input-container .form-control,
+    .panel-card .bootstrap-select,
+    .panel-card .bootstrap-select > .dropdown-toggle{
+      width: 100% !important;
+    }
+
+    /* Sliders also fill nicely */
+    .panel-card .irs{
+      width: 100% !important;
+    }
+
+    /* Optional: slightly tighter vertical rhythm inside sidebar */
+    .panel-card .form-group{
+      margin-bottom: 12px;
+    }
+
   "))
   ),
 
@@ -240,8 +273,8 @@ ui <- fluidPage(
     class = "app-header",
     div(
       class = "accent-bar",
-      h2("Visual 2: Wealth Gradients - Foundational Skills Across Education Stages", class = "app-title"),
-      p("Faceted view of wealth gradients (Africa vs Non-Africa) with quality controls. Styling only: same logic, same behavior.",
+      h2("Wealth Gaps in Foundational Skills", class = "app-title"),
+      p("Compare proficiency across wealth quintiles and education stages, with Africa and non-Africa views and data-quality filters.",
         class = "app-subtitle")
     )
   ),
@@ -275,7 +308,7 @@ ui <- fluidPage(
         
         hr(),
         
-        h4("Filters", class = "section-title"),
+        h4("Filters", class = "section-title accent-bar"),
 
         # Income Level: multi-select dropdown
         if ("income_level" %in% names(filter_columns)) {
@@ -712,14 +745,16 @@ server <- function(input, output, session) {
           y = -0.15,  # below the chart
           xanchor = "center",
           yanchor = "top",
-          bgcolor = "rgba(255, 255, 255, 0.9)",
-          bordercolor = "#CCCCCC",
-          borderwidth = 1
+          bgcolor = "rgba(255, 255, 255, 0.95)",
+          bordercolor = "rgba(229, 231, 235, 0.8)",
+          borderwidth = 0.5,
+          xref = "paper",
+          yref = "paper"
         ),
         annotations = all_category_annotations,
         margin = list(r = 40, t = 100, l = 80, b = 120),  # increased bottom margin for legend
         plot_bgcolor = "#F8F8F8",
-        paper_bgcolor = "white",
+        paper_bgcolor = "#ffffffc8",
         showlegend = TRUE,
         autosize = TRUE
       ) %>%
