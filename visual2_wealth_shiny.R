@@ -91,7 +91,8 @@ ui <- fluidPage(
         # Subject selection
         selectInput("subject",
                     "Subject:",
-                    choices = filter_columns$subject,
+                    choices = c("Foundational Reading" = "reading",
+                                "Foundational Numeracy" = "numeracy"),
                     selected = "reading"),
         
         # Metric type (mean/median with or without LOESS smoothing)
@@ -181,10 +182,6 @@ ui <- fluidPage(
       wellPanel(
         h4("Data Summary"),
         verbatimTextOutput("data_summary")
-      ),
-      wellPanel(
-        h4("Chart Information"),
-        htmlOutput("chart_info")
       )
     ),
 
@@ -217,30 +214,22 @@ server <- function(input, output, session) {
       "median" = list(
         col = "proficiency_rate",
         agg = "median",
-        label = "Median",
-        subtitle = "Median across countries",
-        axis_title = "% with foundational skills"
+        label = "Median"
       ),
       "median_loess" = list(
         col = "proficiency_loess_span1",
         agg = "median",
-        label = "Median (LOESS)",
-        subtitle = "Median of LOESS-smoothed proficiency across countries",
-        axis_title = "% with foundational skills (LOESS)"
+        label = "Median"
       ),
       "mean" = list(
         col = "proficiency_rate",
         agg = "mean",
-        label = "Mean",
-        subtitle = "Mean across countries",
-        axis_title = "% with foundational skills"
+        label = "Mean"
       ),
       "mean_loess" = list(
         col = "proficiency_loess_span1",
         agg = "mean",
-        label = "Mean (LOESS)",
-        subtitle = "Mean of LOESS-smoothed proficiency across countries",
-        axis_title = "% with foundational skills (LOESS)"
+        label = "Mean"
       )
     )
   })
@@ -400,6 +389,9 @@ server <- function(input, output, session) {
     metric_col <- metric$col
     use_mean <- identical(metric$agg, "mean")
     metric_sym <- rlang::sym(metric_col)
+    subject_word <- ifelse(is.null(input$subject) || input$subject == "reading",
+                           "Reading", "Numeracy")
+    loess_suffix <- if (grepl("loess", input$metric_type)) " (LOESS Smoothed)" else ""
     req(nrow(df) > 0)
     
     # Create three datasets: All, Africa, Non-Africa
@@ -520,13 +512,18 @@ server <- function(input, output, session) {
     
     # Layout with two subplots in one row
     metric_label <- metric$label
+    y_axis_title <- paste0("<b>", subject_word, " - % with foundational skills</b>")
+    title_text <- paste0(
+      "<sub><b>Foundational ", subject_word, "</b><br>",
+      metric_label, " proficiency by wealth and grade band",
+      loess_suffix,
+      "</sub>"
+    )
     
     fig <- fig %>%
       layout(
         title = list(
-          text = paste0("<b>Wealth Gradients</b><br><sub>",
-                       tools::toTitleCase(input$subject), " - ",
-                       metric_label, " across countries</sub>"),
+          text = title_text,
           x = 0.5, xanchor = "center"
         ),
         # Africa facet
@@ -540,7 +537,7 @@ server <- function(input, output, session) {
           automargin = TRUE
         ),
         yaxis = list(
-          title = paste0("<b>", metric$axis_title, "</b>"),
+          title = y_axis_title,
           range = c(0, 100),
           gridcolor = "#E5E5E5"
         ),
@@ -631,54 +628,6 @@ server <- function(input, output, session) {
     return(summary_text)
   })
   
-  # Chart information
-  output$chart_info <- renderUI({
-    HTML(
-      "<p><strong>Visual 2: Wealth Gradients</strong></p>
-      <ul>
-        <li><strong>Purpose:</strong> Show inequality in foundational skills by household wealth</li>
-        <li><strong>Facets:</strong> Two panels showing Africa and Non-Africa countries</li>
-        <li><strong>Blue thick line:</strong> All children (aggregated) - <em>with bolded data labels showing percentages</em></li>
-        <li><strong>Red to green gradient:</strong> Poorest → Richest quintiles</li>
-      </ul>
-      <p><strong>Interpretation:</strong></p>
-      <ul>
-        <li>Only the latest year of data is used for each country (no year mixing)</li>
-        <li>Countries dropped by tolerance filter are excluded from calculations</li>
-        <li>Metric (mean/median, with or without LOESS smoothing) across countries can be selected in filters</li>
-        <li>Mean gives the arithmetic average; each country contributes equally</li>
-        <li>Median is more robust to outliers</li>
-        <li>Larger gaps between lines indicate greater inequality</li>
-        <li>Compare patterns across Africa/Non-Africa to see regional differences</li>
-      </ul>
-      <p><strong>Data Structure:</strong></p>
-      <ul>
-        <li>Each country should have <strong>15 combinations</strong>: 3 grade bands × 5 wealth quintiles (Poorest, Second, Middle, Fourth, Richest)</li>
-        <li>Note: 'All' category is not counted in the 15 combinations as it's an aggregate</li>
-        <li>Minimum observations filter excludes individual combinations with low sample sizes</li>
-        <li>Missing combinations tolerance filters out entire countries with too much missing data</li>
-      </ul>
-      <p><strong>How to use filters:</strong></p>
-      <ul>
-        <li><strong>Subject:</strong> Switch between reading and numeracy</li>
-        <li><strong>Metric:</strong> Choose median / median with LOESS / mean / mean with LOESS (default: mean with LOESS)</li>
-        <li><strong>Minimum Observations:</strong> Exclude individual combinations with small sample sizes (default: 50)</li>
-        <li><strong>Missing Combinations Tolerance:</strong> Maximum missing combinations allowed per country out of 15 (1 = all 15 required, 15 = all countries included, default: 15)</li>
-        <li><strong>Wealth Groups:</strong> Multi-select dropdown - select which wealth quintiles to display</li>
-        <li><strong>Income Level & Region:</strong> Multi-select dropdowns - focus on specific contexts</li>
-        <li><strong>Reset All Filters:</strong> Return to default view</li>
-      </ul>
-      <p><strong>Tips:</strong></p>
-      <ul>
-        <li>Use minimum observations to control data quality at the combination level</li>
-        <li>Use missing combinations tolerance to control data completeness at the country level - lower values = more complete countries only, higher values = include countries with partial data</li>
-        <li>The table on the right shows how many combinations are missing for each affected country and the percentage of data loss</li>
-        <li>The chart shows one line per wealth group, aggregated across countries within each facet</li>
-      </ul>
-      <p><em>Lines show unweighted aggregates across education countries. Each country contributes equally.</em></p>"
-    )
-  })
-  
   # Missing combinations list output
   output$missing_countries_list <- renderUI({
     df <- filtered_data()
@@ -751,4 +700,5 @@ server <- function(input, output, session) {
 # ============================================================================
 
 shinyApp(ui = ui, server = server)
+
 

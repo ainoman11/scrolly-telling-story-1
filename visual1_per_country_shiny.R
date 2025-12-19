@@ -86,7 +86,7 @@ if ("is_africa" %in% colnames(data)) {
 # ============================================================================
 
 ui <- fluidPage(
-  titlePanel("Learning Gradient Interactive Line Chart - LOESS Smoothed"),
+  titlePanel("Learning Gradient Interactive Line Chart"),
 
   tags$head(
     tags$style(HTML("
@@ -120,12 +120,7 @@ ui <- fluidPage(
       width = 3,
       class = "lg-column",
       wellPanel(
-        h4("Data Information", class = "unicef-accent"),
-        helpText("This dataset shows LOESS-smoothed proficiency rates. Filtering by observation count (n) ensures data quality."),
-        
-        hr(),
-        
-        h4("Filters"),
+        h4("Filters", class = "unicef-accent"),
         
         # Metric type: dropdown to select how proficiency is calculated
         selectInput("metric_type",
@@ -150,7 +145,8 @@ ui <- fluidPage(
         if ("subject" %in% names(filter_columns)) {
           selectInput("filter_subject",
                       "Subject:",
-                      choices = filter_columns$subject,
+                      choices = c("Foundational Reading" = "reading",
+                                  "Foundational Numeracy" = "numeracy"),
                       selected = "reading")
         },
         
@@ -227,10 +223,6 @@ ui <- fluidPage(
       wellPanel(
         h4("Data Summary"),
         verbatimTextOutput("data_summary")
-      ),
-      wellPanel(
-        h4("Chart Information"),
-        htmlOutput("chart_info")
       )
     ),
 
@@ -297,23 +289,19 @@ server <- function(input, output, session) {
       type,
       "median" = list(
         col = "proficiency_rate",
-        agg = "median",
-        axis_title = "Proficiency (%)"
+        agg = "median"
       ),
       "median_loess" = list(
         col = "proficiency_loess_span1",
-        agg = "median",
-        axis_title = "Proficiency LOESS (%)"
+        agg = "median"
       ),
       "mean" = list(
         col = "proficiency_rate",
-        agg = "mean",
-        axis_title = "Proficiency (%)"
+        agg = "mean"
       ),
       "mean_loess" = list(
         col = "proficiency_loess_span1",
-        agg = "mean",
-        axis_title = "Proficiency LOESS (%)"
+        agg = "mean"
       )
     )
   })
@@ -551,6 +539,10 @@ server <- function(input, output, session) {
     plot_data <- filtered_data()
     metric <- metric_settings()
     metric_col <- metric$col
+    metric_word <- ifelse(identical(metric$agg, "mean"), "Mean", "Median")
+    loess_suffix <- if (grepl("loess", input$metric_type)) " (LOESS Smoothed)" else ""
+    subject_word <- ifelse(is.null(input$filter_subject) || input$filter_subject == "reading",
+                           "Reading", "Numeracy")
 
     # Validate data
     req(nrow(plot_data) > 0)
@@ -727,10 +719,18 @@ server <- function(input, output, session) {
     }
     
     # Update layout
+    y_axis_title <- paste0("<b>", subject_word, " proficiency (%)</b>")
+    title_text <- paste0(
+      "<sub><b>Foundational ", subject_word, "</b><br>",
+      metric_word, " ", subject_word, " proficiency by grade",
+      loess_suffix,
+      "</sub>"
+    )
+
     fig <- fig %>%
       layout(
         title = list(
-          text = "<b>Learning Gradient Analysis</b><br><sub>Proficiency by Grade</sub>",
+          text = title_text,
           x = 0.5,
           xanchor = "center"
         ),
@@ -742,7 +742,7 @@ server <- function(input, output, session) {
           domain = c(0, 0.8)  # leave room on the right for legend inside the figure
         ),
         yaxis = list(
-          title = paste0("<b>", metric$axis_title, "</b>"),
+          title = y_axis_title,
           range = c(0, 100),
           gridcolor = "#E5E5E5"
         ),
@@ -822,65 +822,6 @@ server <- function(input, output, session) {
     )
 
     return(summary_text)
-  })
-  
-  # Chart information output
-  output$chart_info <- renderUI({
-    HTML(
-      "<p><strong>How to use this chart:</strong></p>
-      <ul>
-        <li><strong>Smoothed Data:</strong> This dataset shows raw proficiency rates alongside LOESS-smoothed values for clearer trend visualization</li>
-        <li><strong>Regional Benchmarks:</strong> Two bold lines show median proficiency across countries by grade and region:
-          <ul>
-            <li><strong>Africa</strong> (blue): Median proficiency across African countries by grade</li>
-            <li><strong>Non-Africa</strong> (black): Median proficiency across non-African countries by grade</li>
-            <li>Grade markers show median proficiency for that specific grade</li>
-          </ul>
-        </li>
-        <li><strong>Filters:</strong> Use the sidebar filters to focus on specific subsets of data:
-          <ul>
-            <li><em>Category</em>: Defaults to 'All' (aggregated across all student categories)</li>
-            <li><em>Subject</em>: Defaults to 'reading' (switch to 'numeracy' to see math proficiency)</li>
-            <li><em>Income Level</em>: Multi-select dropdown - select one or more income levels to compare</li>
-            <li><em>Region</em>: Multi-select dropdown - select one or more regions to compare</li>
-            <li><em>Minimum Observations</em>: Exclude country-grade combinations with small sample sizes (default: 50)</li>
-            <li><em>Missing Grades Tolerance</em>: Maximum missing grades allowed per country (1 = complete data with all 8 grades, 8 = all countries included, default: 8)</li>
-          </ul>
-        </li>
-        <li><strong>Hover:</strong> Hover over data points to see comprehensive information including grade and proficiency values</li>
-        <li><strong>Legend:</strong> Click country names to show/hide specific lines. Double-click to isolate a single country.</li>
-        <li><strong>Zoom:</strong> Click and drag to zoom into specific areas; double-click the chart to reset zoom</li>
-        <li><strong>Export:</strong> Use the toolbar (top-right) to download the chart as PNG</li>
-      </ul>
-      <p><strong>Data Quality:</strong></p>
-      <ul>
-        <li>Only the latest year of data is used for each country (no year mixing)</li>
-        <li>Minimum observations filter ensures reliable estimates by excluding country-grade combinations with too few data points</li>
-        <li>Data summary shows excluded combinations and countries with missing grades</li>
-        <li>The 'n' column indicates sample size for each data point</li>
-      </ul>
-      <p><strong>Data Structure:</strong></p>
-      <ul>
-        <li>Individual country lines (grey, opacity 0.6) represent each country's learning gradient</li>
-        <li>Bold lines show median proficiency across countries for each grade, grouped by Africa vs. non-Africa</li>
-        <li>X-axis shows grades from 1 to 8 (discrete grade levels)</li>
-        <li>Y-axis shows LOESS smoothed proficiency values as percentages (0-100%)</li>
-        <li>LOESS smoothing (span=1) applied to raw proficiency rates for each country-category-subject combination</li>
-        <li>All filters work in real-time</li>
-        <li>Category 'All' is an actual data category (includes all student categories combined)</li>
-      </ul>
-      <p><strong>Tips:</strong></p>
-      <ul>
-        <li>Default view shows: category='All', subject='reading', all income levels and regions</li>
-        <li>Use Income Level and Region checkboxes to compare specific groups side-by-side</li>
-        <li>Switch between 'reading' and 'numeracy' to compare literacy vs mathematics proficiency</li>
-        <li>Adjust minimum observations to balance data quality vs coverage - higher values = more reliable but fewer countries</li>
-        <li>Use missing grades tolerance to control data completeness - lower values = more complete datasets, higher values = more countries included</li>
-        <li>Spline interpolation provides smooth visual lines between data points</li>
-        <li>The median lines provide regional benchmarks for comparison</li>
-        <li>Click 'Reset All Filters' to return to default view</li>
-      </ul>"
-    )
   })
   
   # Missing countries list output
@@ -980,6 +921,7 @@ server <- function(input, output, session) {
 # ============================================================================
 
 shinyApp(ui = ui, server = server)
+
 
 
 
