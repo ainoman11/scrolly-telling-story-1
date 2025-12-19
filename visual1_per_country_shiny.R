@@ -89,32 +89,189 @@ if ("is_africa" %in% colnames(data)) {
 # ============================================================================
 
 ui <- fluidPage(
-  titlePanel("Learning Gradient Interactive Line Chart"),
-
   tags$head(
+    tags$meta(charset = "utf-8"),
+    tags$meta(name = "viewport", content = "width=device-width, initial-scale=1"),
     tags$style(HTML("
-      /* UNICEF-inspired accent color */
-      .unicef-accent {
-        border-left: 4px solid #00AEEF;
-        padding-left: 8px;
-      }
-      .chart-container {
-        width: 100% !important;
-        height: 700px;        /* fixed container height so inner widget can use 100% */
-        min-height: 400px;
-      }
-      .plotly.html-widget,
-      .plotly {
-        width: 100% !important;
-        height: 100% !important; /* fill the container height */
-      }
-      @media (max-width: 991px) {
-        /* Stack columns on smaller laptop/tablet screens */
-        .lg-column {
-          margin-bottom: 20px;
-        }
-      }
-    "))
+
+    :root{
+      --unicef-blue:#00AEEF;
+      --unicef-blue-dark:#0077A3;
+      --ink:#1F2A37;
+      --muted:#6B7280;
+      --bg:#F6F8FB;
+      --card:#FFFFFF;
+      --line:#E5E7EB;
+      --shadow: 0 10px 30px rgba(16,24,40,0.08);
+      --shadow2: 0 6px 16px rgba(16,24,40,0.08);
+      --radius: 16px;
+    }
+
+    body{
+      background: var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Inter, Arial, sans-serif;
+    }
+
+    .container-fluid { padding-top: 14px; }
+
+    .app-header{
+      background: linear-gradient(90deg, rgba(0,174,239,0.12), rgba(0,174,239,0.00));
+      border: 1px solid rgba(0,174,239,0.18);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow2);
+    }
+    .app-title{
+      font-size: 18px;
+      font-weight: 750;
+      margin: 0;
+      letter-spacing: 0.2px;
+    }
+    .app-subtitle{
+      margin: 6px 0 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+    .accent-bar{
+      border-left: 5px solid var(--unicef-blue);
+      padding-left: 12px;
+    }
+
+    .lg-column { margin-bottom: 16px; }
+
+    .panel-card{
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow2);
+      padding: 14px 14px 10px 14px;
+    }
+
+    .sidebar-card{
+      position: sticky;
+      top: 12px;
+    }
+    @media (max-width: 991px){
+      .sidebar-card{ position: static; }
+    }
+
+    .section-title{
+      font-size: 14px;
+      font-weight: 750;
+      margin: 0 0 10px 0;
+    }
+
+    .help-text{
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+      margin-top: 6px;
+    }
+
+    .control-label{
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 700;
+      letter-spacing: 0.2px;
+    }
+    .form-control{
+      border-radius: 12px !important;
+      border: 1px solid var(--line) !important;
+      box-shadow: none !important;
+    }
+    .form-control:focus{
+      border-color: rgba(0,174,239,0.65) !important;
+      box-shadow: 0 0 0 4px rgba(0,174,239,0.15) !important;
+    }
+
+    .bootstrap-select > .dropdown-toggle{
+      border-radius: 12px !important;
+      border: 1px solid var(--line) !important;
+    }
+    .bootstrap-select .dropdown-menu{
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .bootstrap-select .dropdown-menu li a{
+      padding: 8px 12px;
+    }
+
+    .irs--shiny .irs-bar { background: var(--unicef-blue) !important; border-top: 1px solid var(--unicef-blue) !important; border-bottom: 1px solid var(--unicef-blue) !important; }
+    .irs--shiny .irs-single { background: var(--unicef-blue) !important; }
+    .irs--shiny .irs-handle { border: 2px solid var(--unicef-blue) !important; }
+
+    .btn-warning{
+      background: var(--unicef-blue) !important;
+      border: 1px solid rgba(0,174,239,0.9) !important;
+      color: #fff !important;
+      font-weight: 750;
+      border-radius: 12px !important;
+      padding: 10px 12px;
+    }
+    .btn-warning:hover{
+      background: var(--unicef-blue-dark) !important;
+      border-color: var(--unicef-blue-dark) !important;
+    }
+
+    .chart-card{
+      padding: 0;
+      overflow: hidden;
+    }
+    .chart-container{
+      width:100% !important;
+      height: 720px;
+      min-height: 420px;
+      border-radius: var(--radius);
+    }
+    .plotly.html-widget,
+    .plotly{
+      width:100% !important;
+      height:100% !important;
+    }
+
+    .summary-two-col pre{
+      background: #FBFCFE !important;
+      border: 1px solid var(--line) !important;
+      border-radius: 14px !important;
+      padding: 12px !important;
+      color: var(--ink) !important;
+      font-size: 12.5px !important;
+      line-height: 1.45 !important;
+      column-count: 2;
+      column-gap: 20px;
+      white-space: pre-wrap;
+    }
+    @media (max-width: 991px){
+      .summary-two-col pre{ column-count: 1; }
+    }
+
+    .scroll-card{
+      max-height: 820px;
+      overflow-y: auto;
+      padding-right: 6px;
+    }
+    .scroll-card::-webkit-scrollbar{ width: 10px; }
+    .scroll-card::-webkit-scrollbar-thumb{ background: rgba(31,42,55,0.15); border-radius: 999px; }
+    .scroll-card::-webkit-scrollbar-track{ background: rgba(31,42,55,0.04); border-radius: 999px; }
+
+    hr{ border-top: 1px solid var(--line); }
+
+    .well { background: transparent; border: none; box-shadow: none; padding: 0; }
+
+  "))
+  ),
+
+  div(
+    class = "app-header",
+    div(
+      class = "accent-bar",
+      h2("Learning Gradient Interactive Line Chart", class = "app-title"),
+      p("Interactive country learning gradients with quality controls (minimum n and missing grades tolerance). Styling only: same logic, same behavior.",
+        class = "app-subtitle")
+    )
   ),
 
   fluidRow(
@@ -122,8 +279,9 @@ ui <- fluidPage(
     column(
       width = 3,
       class = "lg-column",
-      wellPanel(
-        h4("Filters", class = "unicef-accent"),
+      div(
+        class = "panel-card sidebar-card",
+        h4("Filters", class = "section-title accent-bar"),
         
         # Metric type: dropdown to select how proficiency is calculated
         selectInput("metric_type",
@@ -223,8 +381,8 @@ ui <- fluidPage(
                     value = 8,
                     step = 1),
 
-        helpText("Minimum observations: Excludes country-grade combinations with fewer observations than this threshold."),
-        helpText("Missing grades tolerance: Maximum number of missing grades allowed per country (1 = complete data with all 8 grades, 8 = all countries included)."),
+        div(class="help-text", "Minimum observations: Excludes country-grade combinations with fewer observations than this threshold."),
+        div(class="help-text", "Missing grades tolerance: Maximum number of missing grades allowed per country (1 = complete data with all 8 grades, 8 = all countries included)."),
         
         hr(),
         
@@ -239,13 +397,17 @@ ui <- fluidPage(
       width = 6,
       class = "lg-column",
       div(
-        class = "chart-container",
-        plotlyOutput("line_chart", height = "100%", width = "100%")
+        class = "panel-card chart-card",
+        div(
+          class = "chart-container",
+          plotlyOutput("line_chart", height = "100%", width = "100%")
+        )
       ),
       br(),
-      wellPanel(
-        h4("Data Summary"),
-        verbatimTextOutput("data_summary")
+      div(
+        class = "panel-card",
+        h4("Data Summary", class = "section-title"),
+        div(class = "summary-two-col", verbatimTextOutput("data_summary"))
       )
     ),
 
@@ -253,10 +415,10 @@ ui <- fluidPage(
     column(
       width = 3,
       class = "lg-column",
-      wellPanel(
-        h4("Countries with Missing Grades"),
-        htmlOutput("missing_countries_list"),
-        style = "max-height: 800px; overflow-y: auto;"
+      div(
+        class = "panel-card",
+        h4("Countries with Missing Grades", class = "section-title"),
+        div(class = "scroll-card", htmlOutput("missing_countries_list"))
       )
     )
   )
@@ -795,8 +957,8 @@ server <- function(input, output, session) {
     median_info <- ""
     if (!is.null(medians_summary) && nrow(medians_summary) > 0) {
       median_lines <- apply(medians_summary, 1, function(row) {
-        paste0("  • ", row["region_group"], ": ", row["n_countries"],
-               " countries (grades ", row["grade_range"], ")")
+        paste0("- ", row["region_group"], ": ", row["n_countries"],
+               " countries")
       })
       median_info <- paste0("\nRegional Benchmarks (category='All'):\n",
                            paste(median_lines, collapse = "\n"), "\n")
@@ -812,10 +974,8 @@ server <- function(input, output, session) {
       "- Excluded combinations (n ≤ ", input$min_observations, "): ", excluded_combinations, "\n",
       "- Countries with missing grades: ", countries_missing_cats, "\n",
       "- Countries dropped: ", countries_dropped, "\n",
-      "- Missing grades tolerance: ", input$missing_grades_tolerance, " (countries need ≥ ", min_required, " grades)\n",
+      "- Missing grades tolerance: ", input$missing_grades_tolerance, "\n(countries need ≥ ", min_required, " grades)\n",
       "- Unique countries: ", length(unique(df$iso3)), "\n",
-      "- Grade range: ", min(df$grade_numeric, na.rm = TRUE), " - ",
-                         max(df$grade_numeric, na.rm = TRUE), "\n",
       median_info
     )
 
@@ -828,8 +988,8 @@ server <- function(input, output, session) {
     missing_detail <- attr(df, "missing_grades_detail")
     
     if (is.null(missing_detail) || nrow(missing_detail) == 0) {
-      return(HTML("<p style='color: green;'><strong>No countries with missing grades!</strong></p>
-                   <p>All countries have complete data across all grades.</p>"))
+      return(HTML("<p style='color: #0B7A3E; font-weight:700; margin: 6px 0 6px 0;'>No countries with missing grades.</p>
+     <p style='color:#6B7280; margin:0;'>All countries have complete data across all grades.</p>"))
     }
     
     # Calculate percentage missing
