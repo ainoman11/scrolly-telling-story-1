@@ -18,8 +18,10 @@ countries_file <- "data/unicef_countries.csv"
 data <- read_csv(data_file, show_col_types = FALSE)
 
 # Load country names lookup (iso3 -> country)
+# Make unique by iso3 to avoid duplicates (same country can appear in multiple region groupings)
 countries_lookup <- read_csv(countries_file, show_col_types = FALSE) %>%
-  select(iso3, country)
+  select(iso3, country) %>%
+  distinct(iso3, .keep_all = TRUE)
 
 # Valid grade bands
 valid_grade_bands <- c("Primary (1-3)", "Upper Primary (4-6)", "Lower Secondary (7-9)")
